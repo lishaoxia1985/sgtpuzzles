@@ -18,13 +18,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ScaleGestureDetectorCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.EdgeEffectCompat;
-import android.support.v4.widget.ScrollerCompat;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.ScaleGestureDetectorCompat;
+import androidx.core.view.ViewCompat;
+import android.widget.OverScroller;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,8 +34,9 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.EdgeEffect;
 
-import static android.support.v4.view.MotionEventCompat.isFromSource;
+import static androidx.core.view.MotionEventCompat.isFromSource;
 import static android.view.InputDevice.SOURCE_MOUSE;
 import static android.view.InputDevice.SOURCE_STYLUS;
 import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
@@ -100,13 +100,13 @@ public class GameView extends View
 	private final Matrix tempDrawMatrix = new Matrix();
 	private enum DragMode { UNMODIFIED, REVERT_OFF_SCREEN, REVERT_TO_START, PREVENT }
 	private DragMode dragMode = DragMode.UNMODIFIED;
-	private ScrollerCompat mScroller;
-	private final EdgeEffectCompat[] edges = new EdgeEffectCompat[4];
+	private OverScroller mScroller;
+	private final EdgeEffect[] edges = new EdgeEffect[4];
 	// ARGB_8888 is viewable in Android Studio debugger but very memory-hungry
 	// It's also necessary to work around a 4.1 bug https://github.com/chrisboyle/sgtpuzzles/issues/63
 	private static final Bitmap.Config BITMAP_CONFIG =
 			(Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN)  // bug only seen on 4.1.x
-					? Bitmap.Config.ARGB_4444 : Bitmap.Config.RGB_565;
+					? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
 	native float[] getColours();
 	native float suggestDensity(int x, int y);
 
@@ -131,9 +131,9 @@ public class GameView extends View
 		blitters = new Bitmap[512];
 		maxDistSq = Math.pow(ViewConfiguration.get(context).getScaledTouchSlop(), 2);
 		backgroundColour = getDefaultBackgroundColour();
-		mScroller = ScrollerCompat.create(context);
+		mScroller = new OverScroller(context);
 		for (int i = 0; i < 4; i++) {
-			edges[i] = new EdgeEffectCompat(context);
+			edges[i] = new EdgeEffect(context);
 		}
 		gestureDetector = new GestureDetectorCompat(getContext(), new GestureDetector.OnGestureListener() {
 			@Override
@@ -221,7 +221,7 @@ public class GameView extends View
 			if (mScroller.isFinished()) {
 				ViewCompat.postOnAnimation(GameView.this, () -> {
 					redrawForZoomChange();
-					for (EdgeEffectCompat edge : edges) edge.onRelease();
+					for (EdgeEffect edge : edges) edge.onRelease();
 				});
 			} else {
 				ViewCompat.postOnAnimation(GameView.this, animateScroll);
@@ -313,7 +313,10 @@ public class GameView extends View
 			edges[edge].onAbsorb(Math.round(mScroller.getCurrVelocity()));
 			mScroller.abortAnimation();
 		} else {
-			edges[edge].onPull(Math.min(1.f, delta * 1.5f), displacement);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				edges[edge].onPull(Math.min(1.f, delta * 1.5f), displacement);
+			}
+			else edges[edge].onPull(Math.min(1.f, delta * 1.5f));
 		}
 	}
 
@@ -465,7 +468,7 @@ public class GameView extends View
 			parent.handler.removeCallbacks(sendLongPress);
 			if (touchState == TouchState.PINCH && mScroller.isFinished()) {
 				redrawForZoomChange();
-				for (EdgeEffectCompat edge : edges) edge.onRelease();
+				for (EdgeEffect edge : edges) edge.onRelease();
 			} else if (touchState == TouchState.WAITING_LONG_PRESS) {
 				parent.sendKey(viewToGame(touchStart), button);
 				touchState = TouchState.DRAGGING;

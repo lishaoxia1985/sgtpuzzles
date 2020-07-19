@@ -12,11 +12,11 @@
 	<PreferenceCategory android:title="@string/thisGame" android:key="thisGame">
 		<Preference android:key="arrowKeysUnavailable"
 					android:summary="@string/arrowKeysUnavailable" android:selectable="false"/>
-		<CheckBoxPreference android:title="@string/bridgesShowH"
+		<SwitchPreference android:title="@string/bridgesShowH"
 							android:key="bridgesShowH"
 							android:summary="@string/bridgesShowHSummary"
 							android:defaultValue="false" />
-		<CheckBoxPreference android:title="@string/unequalShowH"
+		<SwitchPreference android:title="@string/unequalShowH"
 							android:key="unequalShowH"
 							android:summary="@string/unequalShowHSummary"
 							android:defaultValue="false" />
@@ -27,7 +27,7 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/allGames">
-		<CheckBoxPreference android:title="@string/controlsReminders"
+		<SwitchPreference android:title="@string/controlsReminders"
 							android:summary="@string/controlsRemindersSummary"
 							android:key="controlsReminders"
 							android:defaultValue="true" />
@@ -41,24 +41,22 @@
 						android:entryValues="@array/nightModes"
 						android:entries="@array/nightModeDescs"
 						android:defaultValue="@string/nightModeDefaultValue" />
-		<PreferenceScreen android:title="@string/advancedSettings"
-						  android:summary="@string/advancedSettingsSummary"
-						  android:key="advancedSettings"
-						  android:persistent="false">
-			<PreferenceCategory android:title="@string/displaySettings">
-				<CheckBoxPreference android:title="@string/victoryFlash"
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/displaySettings">
+				<SwitchPreference android:title="@string/victoryFlash"
 									android:summary="@string/victoryFlashSummary"
 									android:key="victoryFlash"
 									android:defaultValue="true" />
-				<CheckBoxPreference android:title="@string/completedPrompt"
+				<SwitchPreference android:title="@string/completedPrompt"
 									android:summary="@string/completedPromptSummary"
 									android:key="completedPrompt"
 									android:defaultValue="true" />
-				<CheckBoxPreference android:title="@string/fullscreen"
+				<SwitchPreference android:title="@string/fullscreen"
 									android:summary="@string/fullscreenSummary"
 									android:key="fullscreen"
 									android:defaultValue="false" />
-				<CheckBoxPreference android:title="@string/stayAwake"
+				<SwitchPreference android:title="@string/stayAwake"
 									android:summary="@string/stayAwakeSummary"
 									android:key="stayAwake"
 									android:defaultValue="false" />
@@ -67,29 +65,29 @@
 								android:entryValues="@array/limitDpiModes"
 								android:entries="@array/limitDpiModeDescs"
 								android:defaultValue="@string/limitDpiModeDefaultValue" />
-			</PreferenceCategory>
-			<PreferenceCategory android:title="@string/keyboardSettings">
-				<CheckBoxPreference android:title="@string/undoRedoOnKeyboard"
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/keyboardSettings">
+				<SwitchPreference android:title="@string/undoRedoOnKeyboard"
 									android:summary="@string/undoRedoOnKeyboardSummary"
 									android:key="undoRedoOnKeyboard"
 									android:defaultValue="true" />
-				<CheckBoxPreference android:title="@string/keyboardBorders"
+				<SwitchPreference android:title="@string/keyboardBorders"
 									android:summary="@string/keyboardBordersSummary"
 									android:key="keyboardBorders"
 									android:defaultValue="false" />
-			</PreferenceCategory>
-			<PreferenceCategory android:title="@string/mouseSettings">
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/mouseSettings">
 				<ListPreference android:title="@string/extMouseLongPress"
 								android:key="extMouseLongPress"
 								android:entryValues="@array/extMouseLongPressModes"
 								android:entries="@array/extMouseLongPressModeDescs"
 								android:defaultValue="auto" />
-				<CheckBoxPreference android:title="@string/extMouseBackKey"
+				<SwitchPreference android:title="@string/extMouseBackKey"
 									android:summary="@string/extMouseBackKeySummary"
 									android:key="extMouseBackKey"
 									android:defaultValue="true" />
-			</PreferenceCategory>
-		</PreferenceScreen>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/About_this_app">

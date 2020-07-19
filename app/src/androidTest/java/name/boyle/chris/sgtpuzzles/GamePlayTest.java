@@ -2,14 +2,14 @@ package name.boyle.chris.sgtpuzzles;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.CoordinatesProvider;
-import android.support.test.espresso.action.GeneralClickAction;
-import android.support.test.espresso.action.GeneralSwipeAction;
-import android.support.test.espresso.action.Press;
-import android.support.test.espresso.action.Swipe;
-import android.support.test.espresso.action.Tap;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.CoordinatesProvider;
+import androidx.test.espresso.action.GeneralClickAction;
+import androidx.test.espresso.action.GeneralSwipeAction;
+import androidx.test.espresso.action.Press;
+import androidx.test.espresso.action.Swipe;
+import androidx.test.espresso.action.Tap;
+import androidx.test.rule.ActivityTestRule;
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -24,15 +24,14 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.pressKey;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.pressKey;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static android.view.KeyEvent.KEYCODE_1;
 import static android.view.KeyEvent.KEYCODE_2;
 import static android.view.KeyEvent.KEYCODE_3;
@@ -47,6 +46,7 @@ import static android.view.KeyEvent.KEYCODE_L;
 import static android.view.KeyEvent.KEYCODE_SPACE;
 import static android.view.KeyEvent.KEYCODE_V;
 import static android.view.KeyEvent.KEYCODE_Z;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotEquals;
 
@@ -224,7 +224,7 @@ public class GamePlayTest {
 	@Parameters(name = "{0}:{1}")
 	public static Iterable<Object[]> data() {
 		Set<String> unusedBackends = new LinkedHashSet<>(Arrays.asList(
-				getTargetContext().getResources().getStringArray(R.array.games)));
+				getInstrumentation().getTargetContext().getResources().getStringArray(R.array.games)));
 		addExamples();
 		for (String _usedBackend : _usedBackends) {
 			unusedBackends.remove(_usedBackend);
@@ -254,7 +254,7 @@ public class GamePlayTest {
 
 	private void assertCompleted(final boolean isCompleted) {
 		// Note that flood and mines copy the status bar so there is score info before/after "COMPLETED".
-		final Matcher<View> titleMatcher = withText(containsString(getTargetContext().getString(R.string.COMPLETED)));
+		final Matcher<View> titleMatcher = withText(containsString(getInstrumentation().getTargetContext().getString(R.string.COMPLETED)));
 		if (isCompleted) {
 			onView(titleMatcher).inRoot(isDialog()).check(matches(isDisplayed()));
 		} else {

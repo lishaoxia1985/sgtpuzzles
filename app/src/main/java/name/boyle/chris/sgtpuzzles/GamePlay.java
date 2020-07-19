@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +22,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NdefMessage;
@@ -36,20 +36,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.PopupMenu;
+import androidx.annotation.NonNull;
+import androidx.core.app.NavUtils;
+import androidx.core.app.ShareCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.PopupMenu;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -63,6 +63,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -136,7 +137,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private static final String UNDO_NEW_GAME_SEEN = "undoNewGameSeen";
 	private static final String REDO_NEW_GAME_SEEN = "redoNewGameSeen";
 
-	private ProgressDialog progress;
+	private AlertDialog progress;
 	private CountDownTimer progressResetRevealer;
 	private TextView statusBar;
 	private SmallKeyboard keyboard;
@@ -166,7 +167,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private String startingBackend = null;
 	private Thread worker;
 	private String lastKeys = "", lastKeysIfArrows = "";
-	private static final File storageDir = Environment.getExternalStorageDirectory();
+	private static final File storageDir = Environment.getDataDirectory();
 	private String[] games;
 	private Menu menu;
 	private String maybeUndoRedo = "" + ((char)UI_UNDO) + ((char)UI_REDO);
@@ -218,17 +219,15 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	{
 		int msgId = launch.needsGenerating() ? R.string.starting : R.string.resuming;
 		final boolean returnToChooser = launch.isFromChooser();
-		progress = new ProgressDialog(this);
-		progress.setMessage(getString(msgId));
-		progress.setIndeterminate(true);
-		progress.setCancelable(true);
-		progress.setCanceledOnTouchOutside(false);
-		progress.setOnCancelListener(dialog1 -> abort(null, returnToChooser));
-		progress.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), (dialog, which) -> abort(null, returnToChooser));
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle(getString(msgId));
+		alertDialogBuilder.setCancelable(false);
+		alertDialogBuilder.setOnCancelListener(dialog1 -> abort(null, returnToChooser));
+		alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> abort(null, returnToChooser));
 		if (launch.needsGenerating()) {
 			final String backend = launch.getWhichBackend();
 			final String label = getString(R.string.reset_this_backend, getString(getResources().getIdentifier("name_" + backend, "string", getPackageName())));
-			progress.setButton(DialogInterface.BUTTON_NEUTRAL, label, (dialog, which) -> {
+			alertDialogBuilder.setNeutralButton(label, (dialog, which) -> {
 				final SharedPreferences.Editor editor = state.edit();
 				editor.remove(SAVED_GAME_PREFIX + backend);
 				editor.remove(SAVED_COMPLETED_PREFIX + backend);
@@ -238,6 +237,8 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				abort(null, true);
 			});
 		}
+		progress = alertDialogBuilder.create();
+		progress.setView(new ProgressBar(this));
 		progress.show();
 		if (launch.needsGenerating()) {
 			progress.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
@@ -1620,7 +1621,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 
 	private void darkenTopDrawable(Button b) {
 		final Drawable drawable = b.getCompoundDrawables()[1].mutate();
-		drawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+		drawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP));
 		b.setCompoundDrawables(null, drawable, null, null);
 	}
 

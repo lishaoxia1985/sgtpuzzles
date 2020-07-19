@@ -22,7 +22,8 @@
 		android:hint="@string/filename"
 		android:imeOptions="flagNoAccessoryAction"
 		android:inputType="text"
-		android:lines="1" />
+		android:lines="1"
+		android:importantForAutofill="no" />
 
 	<Button
 		android:id="@+id/saveButton"

@@ -3,7 +3,8 @@ package name.boyle.chris.sgtpuzzles;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.text.ClipboardManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,7 +50,7 @@ public class SendFeedbackActivity extends Activity
 			startActivity(i);
 			finish();
 		} catch (ActivityNotFoundException e) {
-			((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setText(emailSubject + "\n\n" + body);
+			((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(null, emailSubject + "\n\n" + body));
 			Toast.makeText(this, MessageFormat.format(getString(R.string.no_email_app),
 					getString(R.string.author_email),
 					emailSubject), Toast.LENGTH_LONG).show();

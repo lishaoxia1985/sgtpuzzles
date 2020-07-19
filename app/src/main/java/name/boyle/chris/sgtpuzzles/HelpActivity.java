@@ -7,10 +7,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -56,7 +57,29 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 					getSupportActionBar().setTitle(getString(R.string.title_activity_help) + ": " + w.getTitle());
 			}
 		});
-		webView.setWebViewClient(new WebViewClient() {
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+			webView.setWebViewClient(new WebViewClient() {
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+					String url = request.getUrl().toString();
+					if (url.startsWith("javascript:")) {
+					return false;
+					}
+					if (url.startsWith("file:") || !URL_SCHEME.matcher(url).find()) {
+						webView.loadUrl(url);
+						return true;
+					}
+					// spawn other app
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+					return true;
+				}
+
+				@Override
+				public void onPageFinished(WebView view, String url) {
+					refreshNightNow(nightModeHelper.isNight(), true);
+				}
+			});
+		else webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (url.startsWith("javascript:")) {
@@ -85,7 +108,7 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 		settings.setDisplayZoomControls(false);
 		settings.setAllowContentAccess(false);
 		final Resources resources = getResources();
-		final String lang = resources.getConfiguration().locale.getLanguage();
+		final String lang = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? resources.getConfiguration().getLocales().get(0).getLanguage() : resources.getConfiguration().locale.getLanguage();
 		String assetPath = helpPath(lang, topic);
 		boolean haveLocalised = false;
 		try {
