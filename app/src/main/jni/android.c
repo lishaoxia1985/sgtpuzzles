@@ -18,7 +18,7 @@
 
 #include <sys/time.h>
 
-#include "puzzles.h"
+#include "puzzles/puzzles.h"
 #include "android.h"
 
 #ifndef JNICALL

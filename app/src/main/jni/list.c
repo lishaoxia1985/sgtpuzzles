@@ -6,7 +6,7 @@
  * it directly, or the changes will be lost next time mkfiles.pl runs.
  * Instead, edit Recipe and/or its *.R subfiles.
  */
-#include "puzzles.h"
+#include "puzzles/puzzles.h"
 #define GAMELIST(A) \
     A(blackbox) \
     A(bridges) \

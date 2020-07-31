@@ -1,7 +1,7 @@
 #ifndef PUZZLES_ANDROID_H
 #define PUZZLES_ANDROID_H
 
-#include "puzzles.h"
+#include "puzzles/puzzles.h"
 
 struct frontend {
     midend *me;

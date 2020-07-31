@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "../puzzles.h"
+#include "../puzzles/puzzles.h"
 #include "../android.h"
 
 #define USAGE "Usage: puzzles-gen gamename [params | --seed seed | --desc desc]\n"

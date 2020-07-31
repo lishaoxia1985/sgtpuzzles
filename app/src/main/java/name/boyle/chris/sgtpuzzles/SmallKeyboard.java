@@ -56,15 +56,15 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 		final int mDefaultHeight;
         final int mDefaultHorizontalGap = 0;
         final int mDefaultVerticalGap = 0;
-        int mTotalWidth = 0;
-        int mTotalHeight = 0;
-		boolean mEmpty = false;
+        int mTotalWidth;
+        int mTotalHeight;
+		boolean mEmpty;
 		final Context context;
         private final KeyboardView keyboardView;  // for invalidateKey()
         final List<Key> mKeys;
 		int undoKey = -1, redoKey = -1, primaryKey = -1, secondaryKey = -1, swapLRKey = -1;
-		boolean followEnabled = true;
-		boolean initDone = false;
+		boolean followEnabled;
+		boolean initDone;
 		boolean swapLR = false;
 		final String backendForIcons;
 		private static final Map<String, String> SHARED_ICONS = new LinkedHashMap<>();

@@ -1,3 +1,3 @@
 [submodule "app/src/main/jni/puzzles"]
 	path = app/src/main/jni/puzzles
-	url = https://git.tartarus.org/simon/puzzles.git
+	url = https://github.com/lishaoxia1985/puzzles.git

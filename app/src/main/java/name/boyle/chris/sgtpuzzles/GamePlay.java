@@ -411,9 +411,9 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	}
 
 	@Override
-	protected void onNewIntent(Intent intent)
-	{
-		if( progress != null ) {
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if (progress != null) {
 			stopNative();
 			dismissProgress();
 		}
@@ -933,7 +933,9 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
-		if (requestCode != REQ_CODE_CREATE_DOC || resultCode != Activity.RESULT_OK || dataIntent == null || dataIntent.getData() == null) return;
+		super.onActivityResult(requestCode, resultCode, dataIntent);
+		if (requestCode != REQ_CODE_CREATE_DOC || resultCode != Activity.RESULT_OK || dataIntent == null || dataIntent.getData() == null)
+			return;
 		handleCreateResult(dataIntent);
 	}
 
