@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID -DSMALL_SCREEN -DSTYLUS_BASED -DNO_PRINTING -DCOMBINED -DVIVID_COLOURS")
 file(GLOB puzzles_SRC "puzzles/*.c" "*.c")
-MESSAGE(STATUS puzzles_SRC)
 list(REMOVE_ITEM puzzles_SRC ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/emcc.c)
 list(REMOVE_ITEM puzzles_SRC ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/gtk.c)
 list(REMOVE_ITEM puzzles_SRC ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/nestedvm.c)

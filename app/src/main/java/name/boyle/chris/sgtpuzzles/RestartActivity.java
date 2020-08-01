@@ -1,10 +1,11 @@
 package name.boyle.chris.sgtpuzzles;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class RestartActivity extends Activity
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RestartActivity extends AppCompatActivity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

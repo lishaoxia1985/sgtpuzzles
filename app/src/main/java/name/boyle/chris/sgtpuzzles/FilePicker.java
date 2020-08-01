@@ -1,11 +1,8 @@
 package name.boyle.chris.sgtpuzzles;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Environment;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,7 +30,7 @@ class FilePicker extends Dialog
 	private String[] files;
 	private ListView lv;
 	private FilePicker parent;
-	private final Activity activity;
+	private final AppCompatActivity activity;
 
 	private void dismissAll()
 	{
@@ -97,7 +98,7 @@ class FilePicker extends Dialog
 		}
 	}
 
-	static void createAndShow(@NonNull final Activity activity, @NonNull final File path, final boolean isSave) {
+	static void createAndShow(@NonNull final AppCompatActivity activity, @NonNull final File path, final boolean isSave) {
 		if(! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			Toast.makeText(activity, R.string.storage_not_ready, Toast.LENGTH_SHORT).show();
 			return;
@@ -105,7 +106,7 @@ class FilePicker extends Dialog
 		new FilePicker(activity, path, isSave, null).show();
 	}
 
-	private FilePicker(Activity activity, final File path, final boolean isSave, FilePicker parent)
+	private FilePicker(AppCompatActivity activity, final File path, final boolean isSave, FilePicker parent)
 	{
 		super(activity, android.R.style.Theme);  // full screen
 		this.activity = activity;

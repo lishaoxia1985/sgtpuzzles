@@ -16,10 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.gridlayout.widget.GridLayout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
@@ -31,6 +27,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.gridlayout.widget.GridLayout;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -53,7 +54,7 @@ public class GameChooser extends AppCompatActivity implements SharedPreferences.
 		DEFAULT_STARRED.add("towers");
 	}
 
-	private static final int REQ_CODE_PICKER = Activity.RESULT_FIRST_USER;
+	private static final int REQ_CODE_PICKER = AppCompatActivity.RESULT_FIRST_USER;
 
     private GridLayout table;
 
@@ -380,7 +381,9 @@ public class GameChooser extends AppCompatActivity implements SharedPreferences.
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
-		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null) return;
+		super.onActivityResult(requestCode, resultCode, dataIntent);
+		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null)
+			return;
 		final Uri uri = dataIntent.getData();
 		startActivity(new Intent(Intent.ACTION_VIEW, uri, this, GamePlay.class));
 		overridePendingTransition(0, 0);

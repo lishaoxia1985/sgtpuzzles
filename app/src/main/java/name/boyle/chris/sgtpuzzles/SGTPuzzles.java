@@ -1,11 +1,12 @@
 package name.boyle.chris.sgtpuzzles;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.TaskStackBuilder;
 
-public class SGTPuzzles extends Activity
+public class SGTPuzzles extends AppCompatActivity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
