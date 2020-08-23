@@ -28,14 +28,6 @@
 #define JNIEXPORT
 #endif
 
-/* https://github.com/chrisboyle/sgtpuzzles/issues/298 */
-char *
-stpcpy(char *dst, char const *src)
-{
-	size_t src_len = strlen(src);
-	return memcpy(dst, src, src_len) + src_len;
-}
-
 const struct game* thegame;
 
 void fatal(const char *fmt, ...)
@@ -53,30 +45,12 @@ static frontend *fe = NULL;
 static pthread_key_t envKey;
 static jobject obj = NULL;
 
-// TODO get rid of this horrible hack
-/* This is so that the numerous callers of _() don't have to free strings.
- * Unfortunately they may need a few to be valid at a time (game config
- * dialogs). */
-#define GETTEXTED_SIZE 256
-#define GETTEXTED_COUNT 32
-static char gettexted[GETTEXTED_COUNT][GETTEXTED_SIZE];
-static int next_gettexted = 0;
-
-static jobject ARROW_MODE_NONE = NULL,
-	ARROW_MODE_ARROWS_ONLY = NULL,
-	ARROW_MODE_ARROWS_LEFT_CLICK = NULL,
-	ARROW_MODE_ARROWS_LEFT_RIGHT_CLICK = NULL,
-	ARROW_MODE_DIAGONALS = NULL;
-
 static jobject gameView = NULL;
 static jmethodID
 	blitterAlloc,
 	blitterFree,
 	blitterLoad,
 	blitterSave,
-	changedState,
-	purgingStates,
-	allowFlash,
 	clipRect,
 	dialogAddString,
 	dialogAddBoolean,
@@ -89,15 +63,11 @@ static jmethodID
 	drawText,
 	fillRect,
 	getBackgroundColour,
-	getText,
 	postInvalidate,
 	requestTimer,
 	serialiseWrite,
 	setStatus,
-	showToast,
 	unClip,
-	completed,
-	inertiaFollow,
 	setKeys;
 
 void throwIllegalArgumentException(JNIEnv *env, const char* reason) {
@@ -267,24 +237,6 @@ void android_end_draw(void *handle)
 	(*env)->CallVoidMethod(env, gameView, postInvalidate);
 }
 
-void android_changed_state(void *handle, int can_undo, int can_redo)
-{
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	(*env)->CallVoidMethod(env, obj, changedState, can_undo, can_redo);
-}
-
-void android_purging_states(void *handle)
-{
-    JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-    (*env)->CallVoidMethod(env, obj, purgingStates);
-}
-
-int allow_flash()
-{
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	return (*env)->CallBooleanMethod(env, obj, allowFlash);
-}
-
 static char *android_text_fallback(void *handle, const char *const *strings,
 			       int nstrings)
 {
@@ -300,9 +252,7 @@ const struct drawing_api android_drawing = {
 	android_draw_rect,
 	android_draw_line,
 	android_draw_poly,
-	android_draw_thick_poly,
 	android_draw_circle,
-	android_draw_thick_circle,
 	NULL, // draw_update,
 	android_clip,
 	android_unclip,
@@ -316,8 +266,6 @@ const struct drawing_api android_drawing = {
 	NULL, NULL, NULL, NULL, NULL, NULL, /* {begin,end}_{doc,page,puzzle} */
 	NULL, NULL,				   /* line_width, line_dotted */
 	android_text_fallback,
-	android_changed_state,
-    android_purging_states,
 	android_draw_thick_line,
 };
 
@@ -490,20 +438,32 @@ void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_configEvent(JNIEnv *env, 
 jstring JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_configOK(JNIEnv *env, jobject _obj)
 {
 	pthread_setspecific(envKey, env);
-	char *encoded;
-	const char *err = midend_config_to_encoded_params(fe->me, fe->cfg, &encoded);
-
-	if (err) {
+    const char *err = midend_set_config(fe->me, CFG_SETTINGS, fe->cfg);
+    if (err) {
 		throwIllegalArgumentException(env, err);
 		return NULL;
 	}
-
+	char *encoded = thegame->encode_params(thegame->custom_params(fe->cfg), true);
 	free_cfg(fe->cfg);
 	fe->cfg = NULL;
 
 	jstring ret = (*env)->NewStringUTF(env, encoded);
 	sfree(encoded);
 	return ret;
+}
+
+char *get_current_params(int mode)
+{
+	char sep = (mode == CFG_SEED) ? (char)'#' : (char)':';
+	char *wintitle;
+	char *current_cfg = midend_get_config(fe->me, mode, &wintitle)->u.string.sval;
+	sfree(wintitle);
+	size_t plen = strchr(current_cfg, sep) - current_cfg + 1;
+	char *params = snewn(plen, char);
+	strncpy(params, current_cfg,plen - 1);
+	sfree(current_cfg);
+	params[plen - 1] = '\0';
+	return params;
 }
 
 jstring getDescOrSeedFromDialog(JNIEnv *env, jobject _obj, int mode)
@@ -516,7 +476,7 @@ jstring getDescOrSeedFromDialog(JNIEnv *env, jobject _obj, int mode)
 	int free_buf = false;
 	jstring ret = NULL;
 	if (!strchr(fe->cfg[0].u.string.sval, sep)) {
-		char *params = midend_get_current_params(fe->me, mode == CFG_SEED);
+		char *params = get_current_params(mode);
 		size_t plen = strlen(params);
 		buf = snewn(plen + strlen(fe->cfg[0].u.string.sval) + 2, char);
 		sprintf(buf, "%s%c%s", params, sep, fe->cfg[0].u.string.sval);
@@ -526,7 +486,7 @@ jstring getDescOrSeedFromDialog(JNIEnv *env, jobject _obj, int mode)
 		buf = fe->cfg[0].u.string.sval;
 	}
 	char *willBeMangled = dupstr(buf);
-	const char *error = midend_game_id_int(fe->me, willBeMangled, mode, true);
+	const char *error = midend_game_id(fe->me, willBeMangled);
 	sfree(willBeMangled);
 	if (!error) ret = (*env)->NewStringUTF(env, buf);
 	if (free_buf) sfree(buf);
@@ -631,7 +591,7 @@ jint JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_identifyBackend(JNIEnv *e
 jstring JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_getCurrentParams(JNIEnv *env, jobject _obj)
 {
 	if (! fe || ! fe->me) return NULL;
-	char *params = midend_get_current_params(fe->me, true);
+	char *params = get_current_params(CFG_SEED);
 	jstring ret = (*env)->NewStringUTF(env, params);
 	sfree(params);
 	return ret;
@@ -643,27 +603,7 @@ jstring JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_htmlHelpTopic(JNIEnv *
 	return (*env)->NewStringUTF(env, thegame->htmlhelp_topic);
 }
 
-void android_completed()
-{
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	(*env)->CallVoidMethod(env, obj, completed);
-}
-
-void android_inertia_follow(int is_solved)
-{
-	if (!obj) return;
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	(*env)->CallVoidMethod(env, obj, inertiaFollow, is_solved);
-}
-
-void android_toast(const char *msg, int fromPattern)
-{
-	if (!obj) return;
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	jstring js = (*env)->NewStringUTF(env, msg);
-	if( js == NULL ) return;
-	(*env)->CallVoidMethod(env, obj, showToast, js, fromPattern);
-}
+extern const char* gamenames[];
 
 const game* game_by_name(const char* name) {
 	int i;
@@ -702,72 +642,6 @@ game_params* oriented_params_from_str(const game* my_game, const char* params_st
 		return NULL;
 	}
 	return params;
-}
-
-void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_requestKeys(JNIEnv *env, jobject _obj, jstring jBackend, jstring jParams)
-{
-	pthread_setspecific(envKey, env);
-	if (obj) (*env)->DeleteGlobalRef(env, obj);  // this is called before startPlaying
-	obj = (*env)->NewGlobalRef(env, _obj);
-	const char *backend = (*env)->GetStringUTFChars(env, jBackend, NULL);
-	const game *my_game = game_by_name(backend);
-	int nkeys = 0;
-	assert(my_game != NULL);
-	const char *paramsStr = jParams ? (*env)->GetStringUTFChars(env, jParams, NULL) : NULL;
-	game_params *params = oriented_params_from_str(my_game, paramsStr, NULL);
-	if (jParams) (*env)->ReleaseStringUTFChars(env, jParams, paramsStr);
-	if (params) {
-		int arrowMode;
-		const key_label *keys = midend_request_keys_by_game(fe->me, &nkeys, my_game, params, &arrowMode);
-		char *keyChars = snewn(nkeys + 1, char);
-		char *keyCharsIfArrows = snewn(nkeys + 1, char);
-		int pos = 0, posIfArrows = 0;
-		for (int i = 0; i < nkeys; i++) {
-			if (keys[i].needs_arrows) {
-				keyCharsIfArrows[posIfArrows++] = (char)keys[i].button;
-			} else {
-				keyChars[pos++] = (char)keys[i].button;
-			}
-		}
-		keyChars[pos] = '\0';
-		keyCharsIfArrows[posIfArrows] = '\0';
-		jstring jKeys = (*env)->NewStringUTF(env, keyChars);
-		jstring jKeysIfArrows = (*env)->NewStringUTF(env, keyCharsIfArrows);
-		jobject jArrowMode = (arrowMode == ANDROID_ARROWS_DIAGONALS) ? ARROW_MODE_DIAGONALS :
-				(arrowMode == ANDROID_ARROWS_LEFT_RIGHT) ? ARROW_MODE_ARROWS_LEFT_RIGHT_CLICK :
-				(arrowMode == ANDROID_ARROWS_LEFT) ? ARROW_MODE_ARROWS_LEFT_CLICK :
-				(arrowMode == ANDROID_ARROWS_ONLY) ? ARROW_MODE_ARROWS_ONLY :
-				ARROW_MODE_NONE;
-		(*env)->CallVoidMethod(env, obj, setKeys, jKeys, jKeysIfArrows, jArrowMode);
-		(*env)->DeleteLocalRef(env, jKeys);
-		(*env)->DeleteLocalRef(env, jKeysIfArrows);
-		sfree(keyChars);
-		sfree(keyCharsIfArrows);
-		sfree(params);
-	}
-	(*env)->ReleaseStringUTFChars(env, jBackend, backend);
-}
-
-void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_setCursorVisibility(JNIEnv *env, jobject _obj, jboolean visible)
-{
-	if (!fe || !fe->me) return;
-	pthread_setspecific(envKey, env);
-	midend_android_cursor_visibility(fe->me, visible);
-}
-
-char * get_text(const char *s)
-{
-	if (!s || ! s[0] || !fe) return (char*)s;  // slightly naughty cast...
-	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
-	jstring j = (jstring)(*env)->CallObjectMethod(env, obj, getText, (*env)->NewStringUTF(env, s));
-	const char * c = (*env)->GetStringUTFChars(env, j, NULL);
-	// TODO get rid of this horrible hack
-	char * ret = gettexted[next_gettexted];
-	next_gettexted = (next_gettexted + 1) % GETTEXTED_COUNT;
-	strncpy(ret, c, GETTEXTED_SIZE);
-	ret[GETTEXTED_SIZE-1] = '\0';
-	(*env)->ReleaseStringUTFChars(env, j, c);
-	return ret;
 }
 
 void startPlayingIntGameID(frontend* new_fe, jstring jsGameID, jstring backend)
@@ -825,7 +699,7 @@ jobject getPresetInternal(JNIEnv *env, const struct preset_menu_entry entry) {
         jmethodID newEntryWithSubmenu = (*env)->GetMethodID(env, MenuEntry,  "<init>", "(ILjava/lang/String;[Lname/boyle/chris/sgtpuzzles/MenuEntry;)V");
         return (*env)->NewObject(env, MenuEntry, newEntryWithSubmenu, entry.id, title, submenu);
     } else {
-        jstring params = (*env)->NewStringUTF(env, midend_android_preset_menu_get_encoded_params(fe->me, entry.id));
+        jstring params = (*env)->NewStringUTF(env, thegame->encode_params(entry.params, true));
         jmethodID newEntryWithParams = (*env)->GetMethodID(env, MenuEntry,  "<init>", "(ILjava/lang/String;Ljava/lang/String;)V");
         return (*env)->NewObject(env, MenuEntry, newEntryWithParams, entry.id, title, params);
     }
@@ -843,6 +717,21 @@ jint JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_getUIVisibility(JNIEnv *e
 			+ (thegame->can_configure << 2)
 			+ (thegame->can_solve << 3)
 			+ (midend_wants_statusbar(fe->me) << 4);
+}
+
+void requestKeys(JNIEnv *env, frontend* new_fe)
+{
+    int nkeys = 0;
+    const key_label *keys = midend_request_keys(new_fe->me, &nkeys);
+    char *keyChars = snewn(nkeys + 1, char);
+    int pos = 0;
+    for (int i = 0; i < nkeys; i++)
+        keyChars[pos++] = (char)keys[i].button;
+    keyChars[pos] = '\0';
+    jstring jKeys = (*env)->NewStringUTF(env, keyChars);
+    (*env)->CallVoidMethod(env, obj, setKeys, jKeys);
+    (*env)->DeleteLocalRef(env, jKeys);
+    sfree(keyChars);
 }
 
 void startPlayingInt(JNIEnv *env, jobject _obj, jobject _gameView, jstring backend, jstring saveOrGameID, int isGameID)
@@ -872,6 +761,7 @@ void startPlayingInt(JNIEnv *env, jobject _obj, jobject _gameView, jstring backe
 	x = INT_MAX;
 	y = INT_MAX;
 	midend_size(fe->me, &x, &y, false);
+    requestKeys(env, fe);
 }
 
 void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlaying(JNIEnv *env, jobject _obj, jobject _gameView, jstring savedGame)
@@ -884,44 +774,23 @@ void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlayingGameID(JNIEnv
 	startPlayingInt(env, _obj, _gameView, backend, gameID, true);
 }
 
-void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_purgeStates(JNIEnv *env, jobject _obj)
-{
-    if (fe && fe->me) {
-        midend_purge_states(fe->me);
-    }
-}
-
 jboolean JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_isCompletedNow(JNIEnv *env, jobject _obj) {
     return fe && fe->me && midend_status(fe->me) ? true : false;
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
-	jclass cls, vcls, arrowModeCls;
+	jclass cls, vcls;
 	JNIEnv *env;
 	if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2)) return JNI_ERR;
 	pthread_key_create(&envKey, NULL);
 	pthread_setspecific(envKey, env);
 	cls = (*env)->FindClass(env, "name/boyle/chris/sgtpuzzles/GamePlay");
 	vcls = (*env)->FindClass(env, "name/boyle/chris/sgtpuzzles/GameView");
-	arrowModeCls = (*env)->FindClass(env, "name/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode");
-	ARROW_MODE_NONE = (*env)->NewGlobalRef(env, (*env)->GetStaticObjectField(env, arrowModeCls,
-			(*env)->GetStaticFieldID(env, arrowModeCls, "NO_ARROWS", "Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;")));
-	ARROW_MODE_ARROWS_ONLY = (*env)->NewGlobalRef(env, (*env)->GetStaticObjectField(env, arrowModeCls,
-			(*env)->GetStaticFieldID(env, arrowModeCls, "ARROWS_ONLY", "Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;")));
-	ARROW_MODE_ARROWS_LEFT_CLICK = (*env)->NewGlobalRef(env, (*env)->GetStaticObjectField(env, arrowModeCls,
-			(*env)->GetStaticFieldID(env, arrowModeCls, "ARROWS_LEFT_CLICK", "Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;")));
-	ARROW_MODE_ARROWS_LEFT_RIGHT_CLICK = (*env)->NewGlobalRef(env, (*env)->GetStaticObjectField(env, arrowModeCls,
-			(*env)->GetStaticFieldID(env, arrowModeCls, "ARROWS_LEFT_RIGHT_CLICK", "Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;")));
-	ARROW_MODE_DIAGONALS = (*env)->NewGlobalRef(env, (*env)->GetStaticObjectField(env, arrowModeCls,
-			(*env)->GetStaticFieldID(env, arrowModeCls, "ARROWS_DIAGONALS", "Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;")));
 	blitterAlloc   = (*env)->GetMethodID(env, vcls, "blitterAlloc", "(II)I");
 	blitterFree    = (*env)->GetMethodID(env, vcls, "blitterFree", "(I)V");
 	blitterLoad    = (*env)->GetMethodID(env, vcls, "blitterLoad", "(III)V");
 	blitterSave    = (*env)->GetMethodID(env, vcls, "blitterSave", "(III)V");
-	changedState   = (*env)->GetMethodID(env, cls,  "changedState", "(ZZ)V");
-	purgingStates  = (*env)->GetMethodID(env, cls,  "purgingStates", "()V");
-	allowFlash     = (*env)->GetMethodID(env, cls,  "allowFlash", "()Z");
 	clipRect       = (*env)->GetMethodID(env, vcls, "clipRect", "(IIII)V");
 	dialogAddString = (*env)->GetMethodID(env, cls,  "dialogAddString", "(ILjava/lang/String;Ljava/lang/String;)V");
     dialogAddBoolean = (*env)->GetMethodID(env, cls,  "dialogAddBoolean", "(ILjava/lang/String;Z)V");
@@ -934,17 +803,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 	drawText       = (*env)->GetMethodID(env, vcls, "drawText", "(IIIIILjava/lang/String;)V");
 	fillRect       = (*env)->GetMethodID(env, vcls, "fillRect", "(IIIII)V");
 	getBackgroundColour = (*env)->GetMethodID(env, vcls, "getDefaultBackgroundColour", "()I");
-	getText        = (*env)->GetMethodID(env, cls,  "gettext", "(Ljava/lang/String;)Ljava/lang/String;");
 	postInvalidate = (*env)->GetMethodID(env, vcls, "postInvalidate", "()V");
 	requestTimer   = (*env)->GetMethodID(env, cls,  "requestTimer", "(Z)V");
 	serialiseWrite = (*env)->GetMethodID(env, cls,  "serialiseWrite", "([B)V");
 	setStatus      = (*env)->GetMethodID(env, cls,  "setStatus", "(Ljava/lang/String;)V");
-	showToast      = (*env)->GetMethodID(env, cls,  "showToast", "(Ljava/lang/String;Z)V");
 	unClip         = (*env)->GetMethodID(env, vcls, "unClip", "(II)V");
-	completed      = (*env)->GetMethodID(env, cls,  "completed", "()V");
-	inertiaFollow  = (*env)->GetMethodID(env, cls,  "inertiaFollow", "(Z)V");
-	setKeys        = (*env)->GetMethodID(env, cls,  "setKeys",
-			"(Ljava/lang/String;Ljava/lang/String;Lname/boyle/chris/sgtpuzzles/SmallKeyboard$ArrowMode;)V");
+	setKeys        = (*env)->GetMethodID(env, cls,  "setKeys","(Ljava/lang/String;)V");
 
 	return JNI_VERSION_1_6;
 }

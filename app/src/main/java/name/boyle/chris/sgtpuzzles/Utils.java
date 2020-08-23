@@ -3,10 +3,9 @@ package name.boyle.chris.sgtpuzzles;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.Closeable;

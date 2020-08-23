@@ -4,6 +4,7 @@ import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -33,9 +34,7 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
 			if (!"bridges".equals(whichBackend)) thisGameCategory.removePreference(findPreference("bridgesShowH"));
 			if (!"unequal".equals(whichBackend)) thisGameCategory.removePreference(findPreference("unequalShowH"));
 			final Preference unavailablePref = findPreference("arrowKeysUnavailable");
-			final int capabilityId = getResources().getIdentifier(
-					whichBackend + "_arrows_capable", "bool", getContext().getPackageName());
-			if (capabilityId <= 0 || getResources().getBoolean(capabilityId)) {
+			if (!("untangle" + "netslide" + "sixteen" + "loopy").contains(whichBackend)) {
 				thisGameCategory.removePreference(unavailablePref);
 				final Configuration configuration = getResources().getConfiguration();
 				final SwitchPreference arrowKeysPref = new SwitchPreference(getContext());

@@ -1,106 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="@string/gameChooser" android:key="gameChooser">
-		<ListPreference android:title="@string/chooserStyle"
-							android:key="chooserStyle"
-							android:entryValues="@array/chooserStyles"
-							android:entries="@array/chooserStyleDescs"
-							android:defaultValue="@string/chooserStyleDefaultValue" />
-	</PreferenceCategory>
+    <PreferenceCategory
+        android:key="gameChooser"
+        android:title="@string/gameChooser">
+        <ListPreference
+            android:defaultValue="@string/chooserStyleDefaultValue"
+            android:entries="@array/chooserStyleDescs"
+            android:entryValues="@array/chooserStyles"
+            android:key="chooserStyle"
+            android:title="@string/chooserStyle" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/thisGame" android:key="thisGame">
-		<Preference android:key="arrowKeysUnavailable"
-					android:summary="@string/arrowKeysUnavailable" android:selectable="false"/>
-		<SwitchPreference android:title="@string/bridgesShowH"
-							android:key="bridgesShowH"
-							android:summary="@string/bridgesShowHSummary"
-							android:defaultValue="false" />
-		<SwitchPreference android:title="@string/unequalShowH"
-							android:key="unequalShowH"
-							android:summary="@string/unequalShowHSummary"
-							android:defaultValue="false" />
-		<!--CheckBoxPreference android:title="@string/patternShowLengths"
-							android:key="patternToastLengths"
-							android:summary="@string/patternShowLengthsSummary"
-							android:defaultValue="false" /-->
-	</PreferenceCategory>
+    <PreferenceCategory
+        android:key="thisGame"
+        android:title="@string/thisGame">
+        <Preference
+            android:key="arrowKeysUnavailable"
+            android:selectable="false"
+            android:summary="@string/arrowKeysUnavailable" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="bridgesShowH"
+            android:summary="@string/bridgesShowHSummary"
+            android:title="@string/bridgesShowH" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="unequalShowH"
+            android:summary="@string/unequalShowHSummary"
+            android:title="@string/unequalShowH" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/allGames">
-		<SwitchPreference android:title="@string/controlsReminders"
-							android:summary="@string/controlsRemindersSummary"
-							android:key="controlsReminders"
-							android:defaultValue="true" />
-		<ListPreference android:title="@string/orientation"
-						android:key="orientation"
-						android:entryValues="@array/orientationModes"
-						android:entries="@array/orientationModeDescs"
-						android:defaultValue="@string/orientationModeDefaultValue" />
-		<ListPreference android:title="@string/nightMode"
-						android:key="nightMode"
-						android:entryValues="@array/nightModes"
-						android:entries="@array/nightModeDescs"
-						android:defaultValue="@string/nightModeDefaultValue" />
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/allGames">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="controlsReminders"
+            android:summary="@string/controlsRemindersSummary"
+            android:title="@string/controlsReminders" />
+        <ListPreference
+            android:defaultValue="@string/orientationModeDefaultValue"
+            android:entries="@array/orientationModeDescs"
+            android:entryValues="@array/orientationModes"
+            android:key="orientation"
+            android:title="@string/orientation" />
+        <ListPreference
+            android:defaultValue="@string/nightModeDefaultValue"
+            android:entries="@array/nightModeDescs"
+            android:entryValues="@array/nightModes"
+            android:key="nightMode"
+            android:title="@string/nightMode" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/displaySettings">
-				<SwitchPreference android:title="@string/victoryFlash"
-									android:summary="@string/victoryFlashSummary"
-									android:key="victoryFlash"
-									android:defaultValue="true" />
-				<SwitchPreference android:title="@string/completedPrompt"
-									android:summary="@string/completedPromptSummary"
-									android:key="completedPrompt"
-									android:defaultValue="true" />
-				<SwitchPreference android:title="@string/fullscreen"
-									android:summary="@string/fullscreenSummary"
-									android:key="fullscreen"
-									android:defaultValue="false" />
-				<SwitchPreference android:title="@string/stayAwake"
-									android:summary="@string/stayAwakeSummary"
-									android:key="stayAwake"
-									android:defaultValue="false" />
-				<ListPreference android:title="@string/limitDpi"
-								android:key="limitDpi"
-								android:entryValues="@array/limitDpiModes"
-								android:entries="@array/limitDpiModeDescs"
-								android:defaultValue="@string/limitDpiModeDefaultValue" />
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/displaySettings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="victoryFlash"
+            android:summary="@string/victoryFlashSummary"
+            android:title="@string/victoryFlash" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="completedPrompt"
+            android:summary="@string/completedPromptSummary"
+            android:title="@string/completedPrompt" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="fullscreen"
+            android:summary="@string/fullscreenSummary"
+            android:title="@string/fullscreen" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="stayAwake"
+            android:summary="@string/stayAwakeSummary"
+            android:title="@string/stayAwake" />
+        <ListPreference
+            android:defaultValue="@string/limitDpiModeDefaultValue"
+            android:entries="@array/limitDpiModeDescs"
+            android:entryValues="@array/limitDpiModes"
+            android:key="limitDpi"
+            android:title="@string/limitDpi" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/keyboardSettings">
-				<SwitchPreference android:title="@string/undoRedoOnKeyboard"
-									android:summary="@string/undoRedoOnKeyboardSummary"
-									android:key="undoRedoOnKeyboard"
-									android:defaultValue="true" />
-				<SwitchPreference android:title="@string/keyboardBorders"
-									android:summary="@string/keyboardBordersSummary"
-									android:key="keyboardBorders"
-									android:defaultValue="false" />
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/keyboardSettings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="undoRedoOnKeyboard"
+            android:summary="@string/undoRedoOnKeyboardSummary"
+            android:title="@string/undoRedoOnKeyboard" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="keyboardBorders"
+            android:summary="@string/keyboardBordersSummary"
+            android:title="@string/keyboardBorders" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/mouseSettings">
-				<ListPreference android:title="@string/extMouseLongPress"
-								android:key="extMouseLongPress"
-								android:entryValues="@array/extMouseLongPressModes"
-								android:entries="@array/extMouseLongPressModeDescs"
-								android:defaultValue="auto" />
-				<SwitchPreference android:title="@string/extMouseBackKey"
-									android:summary="@string/extMouseBackKeySummary"
-									android:key="extMouseBackKey"
-									android:defaultValue="true" />
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/mouseSettings">
+        <ListPreference
+            android:defaultValue="auto"
+            android:entries="@array/extMouseLongPressModeDescs"
+            android:entryValues="@array/extMouseLongPressModes"
+            android:key="extMouseLongPress"
+            android:title="@string/extMouseLongPress" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="extMouseBackKey"
+            android:summary="@string/extMouseBackKeySummary"
+            android:title="@string/extMouseBackKey" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/About_this_app">
-		<Preference android:key="about_content"
-				android:summary="@string/about_content" android:selectable="false"/>
-		<PreferenceScreen android:title="@string/Project_website">
-			<intent android:action="android.intent.action.VIEW"
-					android:data="@string/website_url"/>
-		</PreferenceScreen>
-		<PreferenceScreen android:title="@string/Send_feedback">
-			<intent android:targetPackage="name.boyle.chris.sgtpuzzles"
-					android:targetClass="name.boyle.chris.sgtpuzzles.SendFeedbackActivity"/>
-		</PreferenceScreen>
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/About_this_app">
+        <Preference
+            android:key="about_content"
+            android:selectable="false"
+            android:summary="@string/about_content"
+            android:title="@string/app_info" />
+        <PreferenceScreen android:title="@string/Project_website">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/website_url" />
+        </PreferenceScreen>
+        <PreferenceScreen android:title="@string/Send_feedback">
+            <intent
+                android:targetClass="name.boyle.chris.sgtpuzzles.SendFeedbackActivity"
+                android:targetPackage="name.boyle.chris.sgtpuzzles" />
+        </PreferenceScreen>
+    </PreferenceCategory>
 
 </PreferenceScreen>

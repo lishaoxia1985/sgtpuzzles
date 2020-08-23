@@ -16,7 +16,7 @@
     <uses-feature android:name="android.hardware.nfc" android:required="false" />
     <!-- Require something mouse-like (by default faketouch requirement), at least for Untangle - and for number-entry games this means you'll have a usable keyboard either on-screen or physically -->
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <application android:icon="@drawable/icon" android:logo="@drawable/ic_action_bar"
+    <application android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:backupAgent=".BackupAgent" android:allowBackup="true" tools:ignore="AllowBackup,UnusedAttribute"
         android:extractNativeLibs="true"><!-- see GamePlay.startGameGenProcess: this is the easiest way to get puzzlesgen installed and found per-architecture -->

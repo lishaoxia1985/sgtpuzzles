@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Slant</title>
+<link rel="previous" href="blackbox.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="lightup.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="blackbox.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="lightup.html">下一页</a></p>
+<h1><a name="C20"></a>第二十章：<a name="i0"></a>Slant</h1>
+<p>
+    一个正方形网格，在所有方格上绘制一条有一定倾斜方向的对角线，同时满足以下条件：
+</p>
+<ul><li>
+    对角线永远不会形成回路。
+</li>
+<li>
+    带圆圈的数字表示连接到其所在位置的对角线数量。（因此，4是对角线连接后形成的十字形图案的中心，而0是对角线连接后形成的菱形图案的中心；或者更确切地说，0是对角线连接后形成的<b>不完整</b>菱形图案的中心，网格中永远不会出现<b>完整</b>的菱形图案，因为那样会立即形成回路）
+</li>
+</ul>
+<p>
+    此谜题来自于<a name="i1"></a>Nikoli <a href="#p0">[8]</a>。
+</p>
+<p><a name="p0"></a>
+[8] <a href="http://www.nikoli.co.jp/ja/puzzles/gokigen_naname"><code>http://www.nikoli.co.jp/ja/puzzles/gokigen_naname</code></a> (in Japanese)
+</p>
+<h2><a name="S20.1"></a>20.1 <a name="i2"></a>Slant controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+Left-clicking in a blank square will place a <code>\</code> in it (a line leaning to the left, i.e. running from the top left of the square to the bottom right). Right-clicking in a blank square will place a <code>/</code> in it (leaning to the right, running from top right to bottom left).
+</p>
+<p>
+Continuing to click either button will cycle between the three possible square contents. Thus, if you left-click repeatedly in a blank square it will change from blank to <code>\</code> to <code>/</code> back to blank, and if you right-click repeatedly the square will change from blank to <code>/</code> to <code>\</code> back to blank. (Therefore, you can play the game entirely with one button if you need to.)
+</p>
+<p>
+You can also use the cursor keys to move around the grid. Pressing the return or space keys will place a <code>\</code> or a <code>/</code>, respectively, and will then cycle them as above. You can also press <code>/</code> or <code>\</code> to place a <code>/</code> or <code>\</code>, respectively, independent of what is already in the cursor square. Backspace removes any line from the cursor square.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S20.2"></a>20.2 <a name="i3"></a>Slant parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+<dt>
+<em>Difficulty</em>
+</dt>
+<dd>
+Controls the difficulty of the generated puzzle. At Hard level, you are required to do deductions based on knowledge of <em>relationships</em> between squares rather than always being able to deduce the exact contents of one square at a time. (For example, you might know that two squares slant in the same direction, even if you don't yet know what that direction is, and this might enable you to deduce something about still other squares.) Even at Hard level, guesswork and backtracking should never be necessary.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

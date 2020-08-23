@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Cube</title>
+<link rel="previous" href="net.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="fifteen.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="net.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="fifteen.html">下一页</a></p>
+<h1><a name="C4"></a>第四章：<a name="i0"></a>Cube</h1>
+<p>
+    此谜题我最初曾在网页游戏上见过。链接<a href="#p0">[2]</a>提供了Paul Scott制作的此游戏的java版本。有一个由16个方格组成的正方形网格，其中6个方格被染成蓝色，在其中一个方格上有个立方体。利用方向键可以操控立方体作90°滚动，同时该立方体将移动到相邻的方格上。当立方体滚动到一个蓝色方格上时，立方体与该方格的接触面会被染成蓝色，同时该蓝色方格的颜色会被清除；当立方体的蓝色面与网格中的非蓝色方格接触时，该接触方格会被染成蓝色，同时立方体的该蓝色面的颜色会被清除（通常情况下，当你滚动立方体时，立方体与网格中的方格的接触面和网格中与立方体接触的方格会互相交换颜色）。你的工作是把立方体的6个面通过与网格中的蓝色方格接触的方法都染成蓝色（同时蓝色方格的颜色也会被清除），请通过尽量少的移动次数来达到这个目的。
+</p>
+<p>
+与原版Java游戏不同，我的版本添加了一个附加模式：当你精通了在方形网格中滚动立方体的谜题后，可以选择继续游玩在三角形网格中滚动四面体、八面体或二十面体的谜题。
+</p>
+<p><a name="p0"></a>
+[2] <a href="http://www3.sympatico.ca/paulscott/cube/cube.htm"><code>http://www3.sympatico.ca/paulscott/cube/cube.htm</code></a>
+</p>
+<h2><a name="S4.1"></a>4.1 <a name="i1"></a>Cube controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+This game can be played with either the keyboard or the mouse.
+</p>
+<p>
+Left-clicking anywhere on the window will move the cube (or other solid) towards the mouse pointer.
+</p>
+<p>
+The arrow keys can also used to roll the cube on its square grid in the four cardinal directions. On the triangular grids, the mapping of arrow keys to directions is more approximate. Vertical movement is disallowed where it doesn't make sense. The four keys surrounding the arrow keys on the numeric keypad (&#8216;7&#8217;, &#8216;9&#8217;, &#8216;1&#8217;, &#8216;3&#8217;) can be used for diagonal movement.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S4.2"></a>4.2 <a name="i2"></a>Cube parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Type of solid</em>
+</dt>
+<dd>
+Selects the solid to roll (and hence the shape of the grid): tetrahedron, cube, octahedron, or icosahedron.
+</dd>
+<dt>
+<em>Width / top</em>, <em>Height / bottom</em>
+</dt>
+<dd>
+On a square grid, horizontal and vertical dimensions. On a triangular grid, the number of triangles on the top and bottom rows respectively.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

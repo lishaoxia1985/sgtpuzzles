@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Bridges</title>
+<link rel="previous" href="tents.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="unequal.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="tents.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="unequal.html">下一页</a></p>
+<h1><a name="C26"></a>第二十六章：<a name="i0"></a>Bridges</h1>
+<p>
+    在游戏区域有一组岛屿。每个岛屿上都标记有数字。按照下面的规则使用桥梁连接岛屿：
+</p>
+<ul><li>
+    桥只能水平或垂直连接岛屿。
+</li>
+<li>
+    岛屿上的数字表示连接该岛的桥的数量。
+</li>
+<li>
+    两座岛屿之间平行运行的桥的数量不能超过两座。
+</li>
+<li>
+    桥与桥不能互相交叉。
+</li>
+<li>
+    确保所有的岛屿都通过桥连接在一起。
+</li>
+</ul>
+<p>
+    以上规则是默认规则。另外，此谜题还有一些可配置选项，包括将两座岛屿之间平行运行的桥的数量更改为2以外的值，以及引入其他附加约束，例如确保岛屿通过桥连接完成后不能形成任何回路。
+</p>
+<p>
+    此谜题来自于<a name="i1"></a>Nikoli <a href="#p0">[12]</a>。
+</p>
+<p>
+    “Bridges”游戏是由James Harvey贡献的。
+</p>
+<p><a name="p0"></a>
+[12] <a href="http://www.nikoli.co.jp/en/puzzles/hashiwokakero.html"><code>http://www.nikoli.co.jp/en/puzzles/hashiwokakero.html</code></a> (beware of Flash)
+</p>
+<h2><a name="S26.1"></a>26.1 <a name="i2"></a>Bridges controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+To place a bridge between two islands, click the mouse down on one island and drag it towards the other. You do not need to drag all the way to the other island; you only need to move the mouse far enough for the intended bridge direction to be unambiguous. (So you can keep the mouse near the starting island and conveniently throw bridges out from it in many directions.)
+</p>
+<p>
+Doing this again when a bridge is already present will add another parallel bridge. If there are already as many bridges between the two islands as permitted by the current game rules (i.e. two by default), the same dragging action will remove all of them.
+</p>
+<p>
+If you want to remind yourself that two islands definitely <em>do not</em> have a bridge between them, you can right-drag between them in the same way to draw a &#8216;non-bridge&#8217; marker.
+</p>
+<p>
+If you think you have finished with an island (i.e. you have placed all its bridges and are confident that they are in the right places), you can mark the island as finished by left-clicking on it. This will highlight it and all the bridges connected to it, and you will be prevented from accidentally modifying any of those bridges in future. Left-clicking again on a highlighted island will unmark it and restore your ability to modify it.
+</p>
+<p>
+You can also use the cursor keys to move around the grid: if possible the cursor will always move orthogonally, otherwise it will move towards the nearest island to the indicated direction. Holding Control and pressing a cursor key will lay a bridge in that direction (if available); Shift and a cursor key will lay a &#8216;non-bridge&#8217; marker. Pressing the return key followed by a cursor key will also lay a bridge in that direction.
+</p>
+<p>
+You can mark an island as finished by pressing the space bar or by pressing the return key twice.
+</p>
+<p>
+By pressing a number key, you can jump to the nearest island with that number. Letters &#8216;a&#8217;, ..., &#8216;f&#8217; count as 10, ..., 15 and &#8216;0&#8217; as 16.
+</p>
+<p>
+Violations of the puzzle rules will be marked in red:
+</p>
+<ul><li>
+An island with too many bridges will be highlighted in red.
+</li>
+<li>
+An island with too few bridges will be highlighted in red if it is definitely an error (as opposed to merely not being finished yet): if adding enough bridges would involve having to cross another bridge or remove a non-bridge marker, or if the island has been highlighted as complete.
+</li>
+<li>
+A group of islands and bridges may be highlighted in red if it is a closed subset of the puzzle with no way to connect it to the rest of the islands. For example, if you directly connect two 1s together with a bridge and they are not the only two islands on the grid, they will light up red to indicate that such a group cannot be contained in any valid solution.
+</li>
+<li>
+If you have selected the (non-default) option to disallow loops in the solution, a group of bridges which forms a loop will be highlighted.
+</li>
+</ul>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S26.2"></a>26.2 <a name="i3"></a>Bridges parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+<dt>
+<em>Difficulty</em>
+</dt>
+<dd>
+Difficulty level of puzzle.
+</dd>
+<dt>
+<em>Allow loops</em>
+</dt>
+<dd>
+This is set by default. If cleared, puzzles will be generated in such a way that they are always soluble without creating a loop, and solutions which do involve a loop will be disallowed.
+</dd>
+<dt>
+<em>Max. bridges per direction</em>
+</dt>
+<dd>
+Maximum number of bridges in any particular direction. The default is 2, but you can change it to 1, 3 or 4. In general, fewer is easier.
+</dd>
+<dt>
+<em>%age of island squares</em>
+</dt>
+<dd>
+Gives a rough percentage of islands the generator will try and lay before finishing the puzzle. Certain layouts will not manage to lay enough islands; this is an upper bound.
+</dd>
+<dt>
+<em>Expansion factor (%age)</em>
+</dt>
+<dd>
+The grid generator works by picking an existing island at random (after first creating an initial island somewhere). It then decides on a direction (at random), and then works out how far it could extend before creating another island. This parameter determines how likely it is to extend as far as it can, rather than choosing somewhere closer.
+<p>
+High expansion factors usually mean easier puzzles with fewer possible islands; low expansion factors can create lots of tightly-packed islands.
+</p>
+
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

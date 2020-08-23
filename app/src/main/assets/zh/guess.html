@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Guess</title>
+<link rel="previous" href="flip.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="pegs.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="flip.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="pegs.html">下一页</a></p>
+<h1><a name="C15"></a>第十五章：<a name="i0"></a>Guess</h1>
+<p>
+    有一组彩色图钉，请在一定次数内猜中并按次序展示出它们的预定颜色（由计算机自动生成）。
+</p>
+<p>
+    在每次猜测中，当图钉颜色和位置都正确时用⚫标记，图钉颜色正确位置错误时用⚪标记。
+</p>
+<p>
+    此谜题作为桌游（主要由孩之宝（Hasbro）推出）广为人知，标准游戏中每行有6种颜色、4个图钉和10次猜测次数。本版本允许自定义设置颜色数量（最多10种）、图钉数量以及猜测次数。
+</p>
+<p>
+    “Guess”游戏是由James Harvey贡献的。
+</p>
+<h2><a name="S15.1"></a>15.1 <a name="i2"></a>Guess controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+This game can be played with either the keyboard or the mouse.
+</p>
+<p>
+With the mouse, drag a coloured peg from the tray on the left-hand side to its required position in the current guess; pegs may also be dragged from current and past guesses to copy them elsewhere. To remove a peg, drag it off its current position to somewhere invalid.
+</p>
+<p>
+Right-clicking in the current guess adds a &#8216;hold&#8217; marker; pegs that have hold markers will be automatically added to the next guess after marking.
+</p>
+<p>
+Alternatively, with the keyboard, the up and down cursor keys can be used to select a peg colour, the left and right keys to select a peg position, and the space bar or Enter key to place a peg of the selected colour in the chosen position. &#8216;D&#8217; or Backspace removes a peg, and Space adds a hold marker.
+</p>
+<p>
+Pressing &#8216;h&#8217; or &#8216;?&#8217; will fill the current guess with a suggested guess. Using this is not recommended for 10 or more pegs as it is slow.
+</p>
+<p>
+When the guess is complete, the smaller feedback pegs will be highlighted; clicking on these (or moving the peg cursor to them with the arrow keys and pressing the space bar or Enter key) will mark the current guess, copy any held pegs to the next guess, and move the &#8216;current guess&#8217; marker.
+</p>
+<p>
+If you correctly position all the pegs the solution will be displayed below; if you run out of guesses (or select &#8216;Solve...&#8217;) the solution will also be revealed.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S15.2"></a>15.2 <a name="i3"></a>Guess parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu. The default game matches the parameters for the board game &#8216;Mastermind&#8217;.
+</p>
+<dl><dt>
+<em>Colours</em>
+</dt>
+<dd>
+Number of colours the solution is chosen from; from 2 to 10 (more is harder).
+</dd>
+<dt>
+<em>Pegs per guess</em>
+</dt>
+<dd>
+Number of pegs per guess (more is harder).
+</dd>
+<dt>
+<em>Guesses</em>
+</dt>
+<dd>
+Number of guesses you have to find the solution in (fewer is harder).
+</dd>
+<dt>
+<em>Allow blanks</em>
+</dt>
+<dd>
+Allows blank pegs to be given as part of a guess (makes it easier, because you know that those will never be counted as part of the solution). This is turned off by default.
+<p>
+Note that this doesn't allow blank pegs in the solution; if you really wanted that, use one extra colour.
+</p>
+
+</dd>
+<dt>
+<em>Allow duplicates</em>
+</dt>
+<dd>
+Allows the solution (and the guesses) to contain colours more than once; this increases the search space (making things harder), and is turned on by default.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

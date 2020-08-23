@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Twiddle</title>
+<link rel="previous" href="sixteen.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="rect.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="sixteen.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="rect.html">下一页</a></p>
+<h1><a name="C7"></a>第七章：<a name="i0"></a>Twiddle</h1>
+<p>
+    “Twiddle”是一个重新排列滑块的谜题，在视觉上类似于“Sixteen”游戏（参见<a href="sixteen.html#C6">第六章</a>）：一个正方形网格，所有16个方格内均有标示数字编号的滑块，您的目的是按数字顺序排列滑块。
+</p>
+<p>
+    在“basic”难度的Twiddle游戏中，您可以围绕四个方格的中心旋转一个正方形区域。（虽然可以选择旋转方向，但在“basic”的谜题中方向并不重要）在更高难度下，可以旋转由更多的方格组成的区域。
+</p>
+<p>
+    我最初在GameCube游戏《银河战士2》中看到此类型的谜题。在该游戏的主陀螺室中，有一个开门谜题，是Twiddle游戏的一个特例。我开发的版本囊括了所有此类型谜题。
+</p>
+<h2><a name="S7.1"></a>7.1 <a name="i1"></a>Twiddle controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+To play Twiddle, click the mouse in the centre of the square group you wish to rotate. In the basic mode, you rotate a 2&#215;2 square, which means you have to click at a corner point where four tiles meet.
+</p>
+<p>
+In more advanced modes you might be rotating 3&#215;3 or even more at a time; if the size of the square is odd then you simply click in the centre tile of the square you want to rotate.
+</p>
+<p>
+Clicking with the left mouse button rotates the group anticlockwise. Clicking with the right button rotates it clockwise.
+</p>
+<p>
+You can also move an outline square around the grid with the cursor keys; the square is the size above (2&#215;2 by default, or larger). Pressing the return key or space bar will rotate the current square anticlockwise or clockwise respectively.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S7.2"></a>7.2 <a name="i2"></a>Twiddle parameters</h2>
+<p>
+Twiddle provides several configuration options via the &#8216;Custom&#8217; option on the &#8216;Type&#8217; menu:
+</p>
+<ul><li>
+You can configure the width and height of the puzzle grid.
+</li>
+<li>
+You can configure the size of square block that rotates at a time.
+</li>
+<li>
+You can ask for every square in the grid to be distinguishable (the default), or you can ask for a simplified puzzle in which there are groups of identical numbers. In the simplified puzzle your aim is just to arrange all the 1s into the first row, all the 2s into the second row, and so on.
+</li>
+<li>
+You can configure whether the orientation of tiles matters. If you ask for an orientable puzzle, each tile will have a triangle drawn in it. All the triangles must be pointing upwards to complete the puzzle.
+</li>
+<li>
+You can ask for a limited shuffling operation to be performed on the grid. By default, Twiddle will shuffle the grid so much that any arrangement is about as probable as any other. You can override this by requesting a precise number of shuffling moves to be performed. Typically your aim is then to determine the precise set of shuffling moves and invert them exactly, so that you answer (say) a four-move shuffle with a four-move solution. Note that the more moves you ask for, the more likely it is that solutions shorter than the target length will turn out to be possible.
+</li>
+</ul>
+
+<hr><address></address></body>
+</html>

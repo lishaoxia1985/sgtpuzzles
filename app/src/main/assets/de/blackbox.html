@@ -1,128 +1,452 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=US-ASCII">
-<title>Black Box</title>
-<link rel="previous" href="untangle.html">
-<link rel="ToC" href="index.html">
-<link rel="up" href="index.html">
-<link rel="index" href="docindex.html">
-<link rel="next" href="slant.html">
-<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
-<body>
-<p><a href="untangle.html">Previous</a> | <a href="index.html">Contents</a> | <a href="docindex.html">Index</a> | <a href="slant.html">Next</a></p>
-<h1><a name="C19"></a>Chapter 19: <a name="i0"></a>Black Box</h1>
-<p>
-Eine Reihe von B&#228;llen sind in einem rechteckigen Gebiet versteckt. Sie m&#252;ssen die Position der B&#228;lle erschlie&#223;en, indem Sie Laser aus Positionen an den R&#228;ndern der Arena abfeuern und beobachten, wie ihre Strahlen reflektiert werden.
-</p>
-<p>
-Strahlen laufen gradlinig von ihrem Ursprung bis sie die gegen&#252;berliegende Seite der Arena treffen (wo sie wieder auftauchen), falls sie nicht in einer der folgenden Arten von B&#228;llen betroffen sind:
-</p>
-<ul><li>
-Ein Strahl, der einen Ball frontal trifft, wird absorbiert und nicht wieder auftauchen. Dies betrifft auch Strahlen, die einen Ball in der ersten Linie der Arena treffen.
-</li>
-<li>
-Ein Strahl mit einem Ball im Quadrat vorne links und keinem Ball direkt nach vorne wird um 90 Grad nach rechts reflektiert.
-</li>
-<li>
-Ein Strahl mit einem Ball im Quadrat vorne rechts und keinem Ball direkt nach vorne wird entsprechend nach links reflektiert.
-</li>
-<li>
-Ein Strahl, der an seiner Ursprungsposition wieder auftauchen w&#252;rde, gilt als &#8216;reflektiert&#8217;.
-</li>
-<li>
-Ein Strahl, der von einem Ball links oder rechts vor dem Eintrittspunkt abgelenkt w&#252;rde, bevor er in die Arena eintritt, wird auch als &#8216;reflektiert&#8217; betrachtet.
-</li>
-</ul>
-<p>
-Reflektierte Strahlen tauchen als &#8216;R&#8217; auf; Strahlen, die B&#228;lle frontal treffen, tauchen als &#8216;H&#8217; auf. Andernfalls erscheint eine Nummer am Feuerpunkt und dem Ort, an dem der Strahl wieder auftaucht (diese Nummer ist eindeutig diesem Schuss zugeordnet).
-</p>
-<p>
-Sie k&#246;nnen Vermutungen &#252;ber den Ort der B&#228;lle, basierend auf den Eintritts- und Austrittsmuster der Strahlen, platzieren; sobald Sie genug B&#228;lle platziert haben, erscheint ein Knopf, der Ihnen die &#220;berpr&#252;fung Ihrer Vermutungen erlaubt.
-</p>
-<p>
-Hier ist ein Diagramm, das Ihnen zeigt, wie die Positionen der B&#228;lle jedes der oben beschriebenen Strahlverhalten erzeugen k&#246;nnen:
-</p>
-<pre><code> 1RHR----
-|..O.O...|
-2........3
-|........|
-|........|
-3........|
-|......O.|
-H........|
-|.....O..|
- 12-RR---
-</code></pre>
-<p>
-Wie gezeigt ist es m&#246;glich, dass ein Strahl mehrfach reflektiert wird, bevor er wieder auftaucht (siehe Spielschritt 3). &#196;hnlich kann ein Strahl (m&#246;glicherweise mehr als einmal) reflektiert werden, bevor er einen Treffer erh&#228;lt (das &#8216;H&#8217; auf der linken Seite im Beispiel).
-</p>
-<p>
-Beachten Sie, dass jede Anordnung mit mehr als vier B&#228;llen nicht eindeutige L&#246;sungen haben k&#246;nnte. Das folgende Diagramm illustriert dies; falls Sie wissen, dass das Brett f&#252;nf B&#228;lle enth&#228;lt, ist es unm&#246;glich, zu bestimmen, wo der f&#252;nfte Ball ist (m&#246;gliche L&#246;sungen sind durch <code>x</code> gekennzeichnet):
-</p>
-<pre><code> --------
-|........|
-|........|
-|..O..O..|
-|...xx...|
-|...xx...|
-|..O..O..|
-|........|
-|........|
- --------
-</code></pre>
-<p>
-Aus diesem Grund testet das Spiel, wenn Sie Ihre Vermutung &#252;berpr&#252;ft haben wollen, dass Ihre L&#246;sung <em>das gleiche Ergebnis</em> wie die des Computers produziert, statt zu pr&#252;fen, ob Ihre L&#246;sung mit der des Computers &#252;bereinstimmt. Daher k&#246;nnen Sie im obigen Beispiel den f&#252;nften Ball auf <em>einen beliebigen</em> der mit <code>x</code> markierten Pl&#228;tze setzen und Sie w&#252;rden immer noch gewinnen.
-</p>
-<p>
-Black Box ist ein Beitrag von James Harvey zu dieser Sammlung.
-</p>
-<h2><a name="S19.1"></a>19.1 <a name="i1"></a>Black Box-Steuerung</h2>
-<p>
-<em>Unter Android muss man dr&#252;cken statt links klicken und langes dr&#252;cken statt rechts klicken. Wo dieses Handbuch Buchstaben auf der Tastatur erw&#228;hnt, k&#246;nnen diese als Bildzeichen am Fu&#223; des Bildschirms gefunden werden (Strg und Umschalt sind nicht verf&#252;gbar). Es gibt auch ein optionaler Nacht-Modus, in dem dunklere Farben verwendet werden.</em>
-</p>
-<p>
-Um einen Laserstrahl abzufeuern, klicken Sie links in ein Quadrat am Rande der Arena. Das Ergebnis wird sofort angezeigt. Der aktuelle (oder alte) Durchlauf kann durch Dr&#252;cken oder Halten der linken Taste hervorgehoben werden, um den Austrittspunkt f&#252;r den Laser, falls zutreffend, zu best&#228;tigen.
-</p>
-<p>
-Um den Ort eines Balles zu raten, klicken Sie links in die Arena und ein schwarzer Kreis markiert dort die vermutete Position; klicken Sie erneut, um den vermuteten Ball zu entfernen.
-</p>
-<p>
-Durch Rechtsklick k&#246;nnen Stellen in der Arena gegen Ver&#228;nderungen gesperrt werden; ganze Zeilen und Spalten k&#246;nnen entsprechend durch Rechtsklick im Laserquadrat oberhalb oder unterhalb der Spalte bzw. rechts oder links der Zeile gesperrt werden.
-</p>
-<p>
-Die Pfeiltasten k&#246;nnen auch zu Bewegung im Gitter verwandt werden. Durch Dr&#252;cken der Eingabetaste wird ein Laser gefeuert oder eine neue Ballort-Vermutung hinzugef&#252;gt und durch Dr&#252;cken der Leertaste wird eine Zelle, Zeile oder Spalte gesperrt.
-</p>
-<p>
-Wenn eine geeignete Zahl an B&#228;llen geraten wurde erscheint ein Knopf in der oberen linken Ecke des Gitters; durch Anklicken (mit der Maus oder dem Cursor) wird Ihre Vermutung &#252;berpr&#252;ft.
-</p>
-<p>
-Falls Sie den &#8216;Check&#8217;-Knopf anklicken und Ihre Vermutungen nicht korrekt sind, wird das Spiel Ihnen das Minimum an Informationen zeigen, um Ihnen dies vorzuf&#252;hren, damit Sie es erneut versuchen k&#246;nnen. Falls Ihre Ballpositionen nicht mit den Ihnen bereits bekannten Strahlen konsistent sind, wird ein Strahl eingekreist, um Ihnen anzudeuten, dass Sie falsch liegen. Falls die Positionen zu allen existierenden Strahlen passt, Sie aber immer noch falsch liegen, wird ein neuer Strahl (angezeigt in rot) aufgedeckt, der nicht zu Ihrer aktuellen Vermutung passt.
-</p>
-<p>
-Falls Sie sich entscheiden, komplett aufzugeben, k&#246;nnen Sie Solve anw&#228;hlen, um die tats&#228;chlichen Ballpositionen aufzudecken. Zu diesem Zeitpunkt werden korrekt positionierte B&#228;lle als ausgef&#252;llte schwarze Kreise dargestellt, inkorrekt positionierte B&#228;lle als ausgef&#252;llte schwarze Kreise mit roten Kreuzen und fehlende B&#228;lle als ausgef&#252;llte rote Kreise. Zus&#228;tzlich markieren rote Kreise alle Laser, die Sie bereits abgefeuert haben und die nicht mit Ihrer Ballverteilung konsistent waren (genauso wie beim Dr&#252;cken des &#8216;Check&#8217;-Knopfes), und roter Text markiert alle Laser, die Sie abgefeuert h&#228;tten <em>k&#246;nnen</em>, um Ihre Ballverteilung von der richtigen zu unterscheiden.
-</p>
-<p>
-(Alle in <a href="common.html#S2.1">section 2.1</a> beschriebene Aktionen sind auch verf&#252;gbar.)
-</p>
-<h2><a name="S19.2"></a>19.2 <a name="i2"></a>Black Box-Parameter</h2>
-<p>
-Diese Parameter sind von der Option &#8216;Custom...&#8217; im Men&#252; &#8216;Type&#8217; verf&#252;gbar.
-</p>
-<dl><dt>
-<em>Width</em> (Breite), <em>Height</em> (H&#246;he)
-</dt>
-<dd>
-Gr&#246;&#223;e des Gitters in Quadraten. Es gibt 2 &#215; <em>Width</em> &#215; <em>Height</em> Laser pro Gitter, zwei pro Zeile und zwei pro Spalte.
-</dd>
-<dt>
-<em>No. of balls</em>
-</dt>
-<dd>
-Anzahl der im Gitter zu positionierenden B&#228;lle. Dies kann eine einzelne Zahl oder ein Bereich (getrennt durch einen Bindestrich wie &#8216;2-6&#8217; sein) und bestimmt die Anzahl der im Gitter zu positionierenden B&#228;lle. Der &#8216;reveal&#8217;-Knopf wird nur aktiviert, falls Sie die entsprechende Anzahl von B&#228;llen geraten haben; eine Vermutung mit einer anderen Anzahl als die urspr&#252;ngliche L&#246;sung ist nur akzeptabel, falls alle Strahleing&#228;nge und -ausg&#228;nge passen.
-</dd>
-</dl>
 
-<hr><address></address></body>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Black Box</title>
+    <link rel="previous" href="untangle.html">
+    <link rel="ToC" href="index.html">
+    <link rel="up" href="index.html">
+    <link rel="index" href="docindex.html">
+    <link rel="next" href="slant.html">
+    <style type="text/css">
+        body {
+            word-wrap: break-word;
+        }
+
+        body.night {
+            color: #dddddd;
+            background: #000000;
+        }
+
+        body.night a:link {
+            color: #8888ff;
+        }
+
+        body.night a:visited {
+            color: #cc88ff;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        table,
+        table tr td { 
+            border: 2px solid #B3B3B3; 
+            border-collapse: collapse;
+        }
+
+        tr {
+            background-color: #6A6A6A;
+        }
+
+        tr:first-child,
+        tr:last-child,
+        td:first-child,
+        td:last-child {
+            color: #000000;
+            background-color: #dddddd;
+        }
+
+        td {
+            width: 20pt;
+            height: 20pt;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <p><a href="untangle.html">Previous</a> | <a href="index.html">Contents</a> | <a href="docindex.html">Index</a> | <a
+            href="slant.html">Next</a></p>
+    <h1><a name="C19"></a>Chapter 19: <a name="i0"></a>Black Box</h1>
+    <p>
+        Eine Reihe von B&#228;llen sind in einem rechteckigen Gebiet versteckt. Sie m&#252;ssen die Position der
+        B&#228;lle erschlie&#223;en, indem Sie Laser aus Positionen an den R&#228;ndern der Arena abfeuern und
+        beobachten, wie ihre Strahlen reflektiert werden.
+    </p>
+    <p>
+        Strahlen laufen gradlinig von ihrem Ursprung bis sie die gegen&#252;berliegende Seite der Arena treffen (wo sie
+        wieder auftauchen), falls sie nicht in einer der folgenden Arten von B&#228;llen betroffen sind:
+    </p>
+    <ul>
+        <li>
+            Ein Strahl, der einen Ball frontal trifft, wird absorbiert und nicht wieder auftauchen. Dies betrifft auch
+            Strahlen, die einen Ball in der ersten Linie der Arena treffen.
+        </li>
+        <li>
+            Ein Strahl mit einem Ball im Quadrat vorne links und keinem Ball direkt nach vorne wird um 90 Grad nach
+            rechts reflektiert.
+        </li>
+        <li>
+            Ein Strahl mit einem Ball im Quadrat vorne rechts und keinem Ball direkt nach vorne wird entsprechend nach
+            links reflektiert.
+        </li>
+        <li>
+            Ein Strahl, der an seiner Ursprungsposition wieder auftauchen w&#252;rde, gilt als
+            &#8216;reflektiert&#8217;.
+        </li>
+        <li>
+            Ein Strahl, der von einem Ball links oder rechts vor dem Eintrittspunkt abgelenkt w&#252;rde, bevor er in
+            die Arena eintritt, wird auch als &#8216;reflektiert&#8217; betrachtet.
+        </li>
+    </ul>
+    <p>
+        Reflektierte Strahlen tauchen als &#8216;R&#8217; auf; Strahlen, die B&#228;lle frontal treffen, tauchen als
+        &#8216;H&#8217; auf. Andernfalls erscheint eine Nummer am Feuerpunkt und dem Ort, an dem der Strahl wieder
+        auftaucht (diese Nummer ist eindeutig diesem Schuss zugeordnet).
+    </p>
+    <p>
+        Sie k&#246;nnen Vermutungen &#252;ber den Ort der B&#228;lle, basierend auf den Eintritts- und Austrittsmuster
+        der Strahlen, platzieren; sobald Sie genug B&#228;lle platziert haben, erscheint ein Knopf, der Ihnen die
+        &#220;berpr&#252;fung Ihrer Vermutungen erlaubt.
+    </p>
+    <p>
+        Hier ist ein Diagramm, das Ihnen zeigt, wie die Positionen der B&#228;lle jedes der oben beschriebenen
+        Strahlverhalten erzeugen k&#246;nnen:
+    </p>
+    <table>
+        <tr>
+            <td></td>
+            <td>1</td>
+            <td>R</td>
+            <td>H</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>H</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>1</td>
+            <td>2</td>
+            <td></td>
+            <td>R</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p>
+        Wie gezeigt ist es m&#246;glich, dass ein Strahl mehrfach reflektiert wird, bevor er wieder auftaucht (siehe
+        Spielschritt 3). &#196;hnlich kann ein Strahl (m&#246;glicherweise mehr als einmal) reflektiert werden, bevor er
+        einen Treffer erh&#228;lt (das &#8216;H&#8217; auf der linken Seite im Beispiel).
+    </p>
+    <p>
+        Beachten Sie, dass jede Anordnung mit mehr als vier B&#228;llen nicht eindeutige L&#246;sungen haben
+        k&#246;nnte. Das folgende Diagramm illustriert dies; falls Sie wissen, dass das Brett f&#252;nf B&#228;lle
+        enth&#228;lt, ist es unm&#246;glich, zu bestimmen, wo der f&#252;nfte Ball ist (m&#246;gliche L&#246;sungen sind
+        durch <code>x</code> gekennzeichnet):
+    </p>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>X</td>
+            <td>X</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>X</td>
+            <td>X</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p>
+        Aus diesem Grund testet das Spiel, wenn Sie Ihre Vermutung &#252;berpr&#252;ft haben wollen, dass Ihre
+        L&#246;sung <em>das gleiche Ergebnis</em> wie die des Computers produziert, statt zu pr&#252;fen, ob Ihre
+        L&#246;sung mit der des Computers &#252;bereinstimmt. Daher k&#246;nnen Sie im obigen Beispiel den f&#252;nften
+        Ball auf <em>einen beliebigen</em> der mit <code>x</code> markierten Pl&#228;tze setzen und Sie w&#252;rden
+        immer noch gewinnen.
+    </p>
+    <p>
+        Black Box ist ein Beitrag von James Harvey zu dieser Sammlung.
+    </p>
+    <h2><a name="S19.1"></a>19.1 <a name="i1"></a>Black Box-Steuerung</h2>
+    <p>
+        <em>Unter Android muss man dr&#252;cken statt links klicken und langes dr&#252;cken statt rechts klicken. Wo
+            dieses Handbuch Buchstaben auf der Tastatur erw&#228;hnt, k&#246;nnen diese als Bildzeichen am Fu&#223; des
+            Bildschirms gefunden werden (Strg und Umschalt sind nicht verf&#252;gbar). Es gibt auch ein optionaler
+            Nacht-Modus, in dem dunklere Farben verwendet werden.</em>
+    </p>
+    <p>
+        Um einen Laserstrahl abzufeuern, klicken Sie links in ein Quadrat am Rande der Arena. Das Ergebnis wird sofort
+        angezeigt. Der aktuelle (oder alte) Durchlauf kann durch Dr&#252;cken oder Halten der linken Taste hervorgehoben
+        werden, um den Austrittspunkt f&#252;r den Laser, falls zutreffend, zu best&#228;tigen.
+    </p>
+    <p>
+        Um den Ort eines Balles zu raten, klicken Sie links in die Arena und ein schwarzer Kreis markiert dort die
+        vermutete Position; klicken Sie erneut, um den vermuteten Ball zu entfernen.
+    </p>
+    <p>
+        Durch Rechtsklick k&#246;nnen Stellen in der Arena gegen Ver&#228;nderungen gesperrt werden; ganze Zeilen und
+        Spalten k&#246;nnen entsprechend durch Rechtsklick im Laserquadrat oberhalb oder unterhalb der Spalte bzw.
+        rechts oder links der Zeile gesperrt werden.
+    </p>
+    <p>
+        Die Pfeiltasten k&#246;nnen auch zu Bewegung im Gitter verwandt werden. Durch Dr&#252;cken der Eingabetaste wird
+        ein Laser gefeuert oder eine neue Ballort-Vermutung hinzugef&#252;gt und durch Dr&#252;cken der Leertaste wird
+        eine Zelle, Zeile oder Spalte gesperrt.
+    </p>
+    <p>
+        Wenn eine geeignete Zahl an B&#228;llen geraten wurde erscheint ein Knopf in der oberen linken Ecke des Gitters;
+        durch Anklicken (mit der Maus oder dem Cursor) wird Ihre Vermutung &#252;berpr&#252;ft.
+    </p>
+    <p>
+        Falls Sie den &#8216;Check&#8217;-Knopf anklicken und Ihre Vermutungen nicht korrekt sind, wird das Spiel Ihnen
+        das Minimum an Informationen zeigen, um Ihnen dies vorzuf&#252;hren, damit Sie es erneut versuchen k&#246;nnen.
+        Falls Ihre Ballpositionen nicht mit den Ihnen bereits bekannten Strahlen konsistent sind, wird ein Strahl
+        eingekreist, um Ihnen anzudeuten, dass Sie falsch liegen. Falls die Positionen zu allen existierenden Strahlen
+        passt, Sie aber immer noch falsch liegen, wird ein neuer Strahl (angezeigt in rot) aufgedeckt, der nicht zu
+        Ihrer aktuellen Vermutung passt.
+    </p>
+    <p>
+        Falls Sie sich entscheiden, komplett aufzugeben, k&#246;nnen Sie Solve anw&#228;hlen, um die tats&#228;chlichen
+        Ballpositionen aufzudecken. Zu diesem Zeitpunkt werden korrekt positionierte B&#228;lle als ausgef&#252;llte
+        schwarze Kreise dargestellt, inkorrekt positionierte B&#228;lle als ausgef&#252;llte schwarze Kreise mit roten
+        Kreuzen und fehlende B&#228;lle als ausgef&#252;llte rote Kreise. Zus&#228;tzlich markieren rote Kreise alle
+        Laser, die Sie bereits abgefeuert haben und die nicht mit Ihrer Ballverteilung konsistent waren (genauso wie
+        beim Dr&#252;cken des &#8216;Check&#8217;-Knopfes), und roter Text markiert alle Laser, die Sie abgefeuert
+        h&#228;tten <em>k&#246;nnen</em>, um Ihre Ballverteilung von der richtigen zu unterscheiden.
+    </p>
+    <p>
+        (Alle in <a href="common.html#S2.1">section 2.1</a> beschriebene Aktionen sind auch verf&#252;gbar.)
+    </p>
+    <h2><a name="S19.2"></a>19.2 <a name="i2"></a>Black Box-Parameter</h2>
+    <p>
+        Diese Parameter sind von der Option &#8216;Custom...&#8217; im Men&#252; &#8216;Type&#8217; verf&#252;gbar.
+    </p>
+    <dl>
+        <dt>
+            <em>Width</em> (Breite), <em>Height</em> (H&#246;he)
+        </dt>
+        <dd>
+            Gr&#246;&#223;e des Gitters in Quadraten. Es gibt 2 &#215; <em>Width</em> &#215; <em>Height</em> Laser pro
+            Gitter, zwei pro Zeile und zwei pro Spalte.
+        </dd>
+        <dt>
+            <em>No. of balls</em>
+        </dt>
+        <dd>
+            Anzahl der im Gitter zu positionierenden B&#228;lle. Dies kann eine einzelne Zahl oder ein Bereich (getrennt
+            durch einen Bindestrich wie &#8216;2-6&#8217; sein) und bestimmt die Anzahl der im Gitter zu
+            positionierenden B&#228;lle. Der &#8216;reveal&#8217;-Knopf wird nur aktiviert, falls Sie die entsprechende
+            Anzahl von B&#228;llen geraten haben; eine Vermutung mit einer anderen Anzahl als die urspr&#252;ngliche
+            L&#246;sung ist nur akzeptabel, falls alle Strahleing&#228;nge und -ausg&#228;nge passen.
+        </dd>
+    </dl>
+
+    <hr>
+    <address></address>
+</body>
+
 </html>

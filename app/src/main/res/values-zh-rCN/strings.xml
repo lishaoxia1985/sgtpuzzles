@@ -26,6 +26,7 @@ chris@boyle.name and I'll be happy to include it in future versions.
     <string name="about_content">"Simon Tatham’s Portable Puzzle Collection
 Version %s"</string>
     <!-- Things used by the Android front-end only -->
+    <string name="app_info">应用信息</string>
     <string name="app_name">Puzzles</string>
     <string name="website_url">https://chris.boyle.name/projects/android-puzzles/</string>
     <string name="author_email">chris@boyle.name</string>
@@ -82,8 +83,8 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="victoryFlashSummary">胜利光辉闪耀</string>
     <string name="Change_type">游戏选项</string>
     <!-- Chooser -->
-    <string name="games_starred">收藏的游戏（长按切换）</string>
-    <string name="games_others">其它</string>
+    <string name="my_favorites">我的收藏</string>
+    <string name="all_games">所有游戏</string>
     <string name="games_others_none_starred">长按收藏一个游戏</string>
     <!-- Help activity -->
     <string name="title_activity_help">帮助</string>
@@ -98,10 +99,10 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="Seed_">随机种子…</string>
     <string name="seedWarning">The current game has no seed because it was generated from a Game ID. The value above is an empty seed.</string>
     <string name="Load_">读取…</string>
-    <string name="Save_">载入…</string>
+    <string name="Save_">保存游戏</string>
     <string name="Share_">分享…</string>
     <string name="share_title">Share puzzle with</string>
-    <string name="Type">Type</string>
+    <string name="Type">类型</string>
     <string name="Custom_">自定义…</string>
     <string name="Help">帮助</string>
     <string name="How_to_play_this_game">如何玩这个游戏</string>
@@ -204,45 +205,45 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="name_untangle">Untangle</string>
     <!-- These are for Menu/Game/Other (detail mode) -->
     <string name="no_desc">(no summary available)</string>
-    <string name="desc_blackbox">发射激光并观察它们被反射或吸收的情况来定位盒子里小球的位置，激光发射位置的提示含义如下：“H”表示激光从该处发射后被小球吸收，“R”表示激光从该处发射后又被反射回发射位置（激光射出位置的对角线方格有小球存在也被认为其将被反射回发射位置），数字表示激光从该处发射在另一相同数字位置射出网格。激光传输路径规则如下：1.激光传输路径的左上角有一个小球，则激光在该球的右下位置向右偏转；2.激光传输路径的右上角有一个小球，则激光在该球的左下位置向左偏转；3.激光传输路径的左上角右上角各有一个小球，则激光180°反弹回去。</string>
+    <string name="desc_blackbox">发射激光并观察它们被反射或吸收的情况来定位盒子里小球的位置。</string>
     <string name="desc_bridges">用桥连接小岛（岛上的数字表示连接该岛的桥的数量，桥不能斜向连接）。</string>
     <string name="desc_cube">滚动立方体收集所有油漆。</string>
     <string name="desc_dominosa">将数字两两配对成一张骨牌，每对数字组合都是独一无二的，最终形成一套完整而独特的多米诺骨牌。</string>
-    <string name="desc_fifteen">通过滑动使方块在网格内按数字顺序排列。</string>
-    <string name="desc_filling">在方格内填入数字，使由相同数字的方格组成的连续区域的方格总数正好等于方格上的数字。</string>
-    <string name="desc_flip">翻转方块直至所有方块都正面朝上。请注意翻转其中一个方块，它的相邻方块也会随之翻转。</string>
-    <string name="desc_flood">在给定的次数内，通过反复用不同的颜色填充左上角方格，尝试使整个网格被相同颜色覆盖。</string>
+    <string name="desc_fifteen">通过滑动使滑块在网格内按数字顺序排列。</string>
+    <string name="desc_filling">用数字填充网格，使包含相同数字的方格组成的连续区域的方格总数正好等于方格包含的数字。</string>
+    <string name="desc_flip">点击方格直至所有方格都被点亮。点击其中一个方格，其状态改变的同时，它周围的其他方格也会改变状态。</string>
+    <string name="desc_flood">在给定的次数内，通过反复用不同的颜色填充左上角区域，尝试使整个网格融为一色。</string>
     <string name="desc_galaxies">划分网格，使划分后的每个区域都以白点为原点中心对称。</string>
     <string name="desc_guess">猜测隐藏的按次序排列的颜色组合。游戏的提示信息中，⚫表示颜色位置都正确，⚪表示颜色正确位置错误。</string>
     <string name="desc_inertia">在不踩到地雷的情况下移动小球收集网格上的所有宝石。</string>
-    <string name="desc_keen">输入数字使每行（列）数字不重复出现，同时每个划分区域里的所有数字进行区域左上角标示的运算法则运算后的结果等于区域左上角标示的数字。</string>
+    <string name="desc_keen">用数字填充网格，确保每行（列）数字不重复出现，同时每个划分区域里的所有数字经过区域标示的运算符号运算后的结果等于区域标示的数字。</string>
     <string name="desc_lightup">放置灯使所有方格都被点亮，黑色方格中的数字表示与该方格相邻的灯的数量。</string>
-    <string name="desc_loopy">画一条不间断且不交叉的闭合线，方格中的数字表示所画的闭合线经过该方格的边的数量。</string>
+    <string name="desc_loopy">画一条不间断不交叉的闭合回路，方格中的数字表示该方格的多少条边构成了回路的一部分。</string>
     <string name="desc_magnets">放置磁铁以满足+/-计数（注意并不是所有空格都需要放置磁铁），同时避免磁铁同极互相排斥。</string>
     <string name="desc_map">用4种颜色给地图着色，确保所有相邻区域的颜色不同。</string>
     <string name="desc_mines">根据给定的邻近地雷数据找出网格中的所有地雷。游戏在首次点击网格后创建，创建过程可能比较慢，请耐心等待。</string>
-    <string name="desc_net">旋转方格，使网格中所有方格的图案形成连接到中心方格的完整图案。</string>
-    <string name="desc_netslide">滑动行（列），确保网格中所有方格的图案形成连接到中心方格的完整图案。</string>
-    <string name="desc_palisade">沿着网格边缘画线将网格划分为大小相等的若干个连续区域，区域所包含方格数量在游戏左下角的状态栏显示，方格中的数字表示所画的线经过该方格的边的数量。</string>
-    <string name="desc_pattern">用黑色方块填充网格，每行（列）标示的一组数字表示该行（列）根据数字排列次序依次出现的黑色连续方块区域的长度。</string>
-    <string name="desc_pearl">画一条经过所有白点和黑点的单闭合回路，同时确保黑点处为直角，白点处为直线，但与白点相连的相邻方格至少有一个拐角。</string>
-    <string name="desc_pegs">通过跳过其他钉子来移除钉子，直到只剩下一个钉子。</string>
-    <string name="desc_range">放置黑色方块以限制每个标示数字的方格的可见距离，方格中的数字表示该方格的可见距离。</string>
+    <string name="desc_net">旋转方格，使网格中所有方格形成连接到中心方格的完整网络。</string>
+    <string name="desc_netslide">滑动行（列），使网格中所有方格形成连接到中心方格的完整网络。</string>
+    <string name="desc_palisade">将网格划分为大小相等的若干连续区域，区域所包含的方格数量在游戏左下角的状态栏显示，方格中的数字表示区域边界包括该方格的边的数量。</string>
+    <string name="desc_pattern">用黑色或白色填充网格，每行（列）标示的一组数字表示该行（列）根据数字排列次序依次出现的黑色连续区域的长度。</string>
+    <string name="desc_pearl">画一条经过所有⚫和⚪的单闭合回路，确保⚫处为拐角，但与⚫相连的相邻方格不能是拐角，⚪处为直线，但与⚪相连的相邻方格至少一个是拐角。</string>
+    <string name="desc_pegs">通过跳过其他钉子来移除钉子，直到只剩下最后一个钉子。</string>
+    <string name="desc_range">用黑色填充网格以限制每个标示数字的方格的可见距离，方格中的数字表示该方格的可见距离。</string>
     <string name="desc_rect">将网格划分为若干个只包含一个数字的矩形区域，该数字表示其所在区域的方格数量。</string>
-    <string name="desc_samegame">通过点击至少有2个颜色相同的方格构成的连续区域来清除整个网格，一次移除的连续区域越大获得的分数越高。</string>
-    <string name="desc_signpost">跟随箭头指引将方格连接成一条遍历整个网格的路径。</string>
-    <string name="desc_singles">删除若干数字使每行（列）数字不重复出现，确保删除数字后形成的黑色方格互不相邻，同时网格中所有白色方格全部相连。</string>
+    <string name="desc_samegame">通过点击消除至少有2个颜色相同的方格构成的连续区域来清除网格，一次消除的连续区域越大获得的分数越高。</string>
+    <string name="desc_signpost">跟随箭头指引将方格连接成一条遍历整个网格的数字序列。</string>
+    <string name="desc_singles">删除若干数字使每行（列）数字不重复出现，确保删除数字后形成的黑色方格互不相邻，同时网格中所有白色方格互相连接。</string>
     <string name="desc_sixteen">滑动行（列），使网格中的数字按顺序排列。</string>
     <string name="desc_slant">在方格中画对角线，圆圈中的数字表示连接到该圆圈的对角线的数量，同时确保对角线的连线不能形成闭合的回路。</string>
     <string name="desc_solo">用数字填充网格，同时确保每行、列和划分区域的数字不重复出现。</string>
-    <string name="desc_tents">放置帐篷，使每棵树有且只有一个帐篷与之相邻(对角线方向相邻的不算)，同时帐篷之间不能相邻（对角线方向相邻的也不行），并且确保每行（列）的帐篷数量正确。</string>
+    <string name="desc_tents">放置帐篷，使每个帐篷至少有一颗树木与之相邻（对角线方向相邻的不算相邻），同时每个帐篷互不相邻（对角线方向也不能相邻），并且每行（列）的帐篷数量正确。</string>
     <string name="desc_towers">放置塔，确保每行（列）中的塔高度都不同，网格边缘的数字表示从数字所在位置向网格看能看到的塔的个数。</string>
-    <string name="desc_tracks">完成从A到B的火车轨道连接，行（列）标示的数字表示该行（列）拥有的火车轨道数量。⚠轨道不能相互交叉。</string>
+    <string name="desc_tracks">完成从A到B的火车轨道连接，行（列）标示的数字表示该行（列）拥有的火车轨道数量。⚠轨道自身不会交叉。</string>
     <string name="desc_twiddle">旋转4个方格组成的区域，使网格中的所有数字按顺序排列。</string>
-    <string name="desc_undead">在网格中填满怪物，网格边缘的数字表示从该处能看到的怪物数量（怪物也可通过镜子折射映入眼中）。吸血鬼可直接看到，但经镜子折射后的吸血鬼无法看到；幽灵不能直接看到，但经镜子折射后的幽灵可以看到，僵尸则两种情况下都能看到。</string>
-    <string name="desc_unequal">输入数字，使每行（列）数字不重复出现，同时满足“>”符号标示的大小关系。</string>
-    <string name="desc_unruly">用黑白两色给方格着色，确保水平或垂直方向不会出现3个相同颜色的方格相连的情况，且每行（列）都包含相同数量的黑白方格。</string>
-    <string name="desc_untangle">移动图上的点，直到没有线相互交叉。</string>
+    <string name="desc_undead">在网格中填充怪物，网格边缘的数字表示从该处能看到的怪物数量。吸血鬼可直接看到，但经镜子折射后的吸血鬼无法看到；幽灵不能直接看到，但经镜子折射后的幽灵可以看到，僵尸则两种情况下都能看到。</string>
+    <string name="desc_unequal">用数字填充网格，确保每行（列）数字不重复出现，同时满足“>”符号表示的大小关系。</string>
+    <string name="desc_unruly">用黑白两色给方格着色，确保每行（列）不会有3个相同颜色的方格连续出现，且每行（列）都包含相同数量的黑白方格。</string>
+    <string name="desc_untangle">移动图上的点，直到没有线互相交叉。</string>
     <!-- Non-obvious controls generally -->
     <string name="toast_flood">点击选中一种颜色填充左上角</string>
     <string name="toast_guess">在指定位置填充颜色，完成后点击右侧小圆形组件</string>

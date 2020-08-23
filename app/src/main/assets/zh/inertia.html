@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Inertia</title>
+<link rel="previous" href="loopy.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="tents.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="loopy.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="tents.html">下一页</a></p>
+<h1><a name="C24"></a>第二十四章：<a name="i0"></a>Inertia</h1>
+<p>
+    你是一个绿绿的小球，孤独地徘徊在充满危险的迷宫里。宝石是你唯一的追寻，地雷只会让你碰得伤痕遍体。
+</p>
+<p>
+    你可以横竖或斜向移动小球。当球开始移动时，直到碰到东西才会停下来。球的移动遵循下列规则：
+<ul><li>如果它的路径上有一堵墙，它就会停下来。</li>
+    <li>如果它是斜向移动的，它会穿过两堵墙之间的对角线缝隙继续移动。</li>
+    <li>网格中有些方格是停止点。当球移动到一个停止点时，它将停止移动。</li>
+    <li>宝石不会停止球的移动，小球捡起宝石后会继续前进。</li>
+</ul>
+</p>
+<p>
+    碰到地雷的后果是致命的。如果你在一次移动中捡到最后一颗宝石的同时击中地雷，游戏系统也会判定你死亡而不是胜利。
+</p>
+<p>
+    此谜题最初是Ben Olmstead<a href="#p0">[11]</a>为Windows系统制作的，他很慷慨地在我的请求下发布了他的源代码，这样我就可以为这个谜题合集加入此谜题。
+</p>
+<p><a name="p0"></a>
+[11] <a href="http://xn13.com/"><code>http://xn13.com/</code></a>
+</p>
+<h2><a name="S24.1"></a>24.1 <a name="i1"></a>Inertia controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+You can move the ball in any of the eight directions using the numeric keypad. Alternatively, if you click the left mouse button on the grid, the ball will begin a move in the general direction of where you clicked.
+</p>
+<p>
+If you use the &#8216;Solve&#8217; function on this game, the program will compute a path through the grid which collects all the remaining gems and returns to the current position. A hint arrow will appear on the ball indicating the direction in which you should move to begin on this path. If you then move in that direction, the arrow will update to indicate the next direction on the path. You can also press Space to automatically move in the direction of the hint arrow. If you move in a different direction from the one shown by the arrow, arrows will be shown only if the puzzle is still solvable.
+</p>
+<p>
+All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available. In particular, if you do run into a mine and die, you can use the Undo function and resume playing from before the fatal move. The game will keep track of the number of times you have done this.
+</p>
+<h2><a name="S24.2"></a>24.2 <a name="i2"></a>Inertia parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

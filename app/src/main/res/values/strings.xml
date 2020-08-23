@@ -26,6 +26,7 @@ chris@boyle.name and I'll be happy to include it in future versions.
     <string name="about_content">"Simon Tatham’s Portable Puzzle Collection
 Version %s"</string>
     <!-- Things used by the Android front-end only -->
+    <string name="app_info">App Info</string>
     <string name="app_name">Puzzles</string>
     <string name="website_url">https://chris.boyle.name/projects/android-puzzles/</string>
     <string name="author_email">chris@boyle.name</string>
@@ -82,8 +83,8 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="victoryFlashSummary">Victory flash</string>
     <string name="Change_type">Change type</string>
     <!-- Chooser -->
-    <string name="games_starred">Starred (long press to toggle)</string>
-    <string name="games_others">Others</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="all_games">All Games</string>
     <string name="games_others_none_starred">Long press to star a game</string>
     <!-- Help activity -->
     <string name="title_activity_help">Help</string>

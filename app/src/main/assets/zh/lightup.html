@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Light Up</title>
+<link rel="previous" href="slant.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="map.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="slant.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="map.html">下一页</a></p>
+<h1><a name="C21"></a>第二十一章：<a name="i0"></a>Light Up</h1>
+<p>
+    一个正方形网格，有些方格是黑色的，其中一些黑色方格还标记有数字。你的任务是在网格内放置灯来照亮所有方格。
+</p>
+<p>
+    每一盏灯都照亮它所在的方格，以及它的水平或垂直方向的所有方格，除非有一个黑色方格挡住了光线。
+</p>
+<p>
+    要赢得胜利，你必须遵守以下规则：
+</p>
+<ul><li>
+    所有非黑色方格都被照亮。
+</li>
+<li>
+    灯与灯不能互相照射。
+</li>
+<li>
+    黑色方格标记的数字表示与之相邻的灯的数量（即它的上下左右四个相邻方格的灯的总数）。
+</li>
+<li>
+    未标记数字的黑色方格可以有任意数量的灯与之相邻。
+</li>
+</ul>
+<p>
+    此谜题来自于<a name="i1"></a>Nikoli <a href="#p0">[9]</a>。
+</p>
+<p>
+    “Light Up”游戏是由James Harvey贡献的。
+</p>
+<p><a name="p0"></a>
+[9] <a href="http://www.nikoli.co.jp/en/puzzles/akari.html"><code>http://www.nikoli.co.jp/en/puzzles/akari.html</code></a> (beware of Flash)
+</p>
+<h2><a name="S21.1"></a>21.1 <a name="i2"></a>Light Up controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+Left-clicking in a non-black square will toggle the presence of a light in that square. Right-clicking in a non-black square toggles a mark there to aid solving; it can be used to highlight squares that cannot be lit, for example.
+</p>
+<p>
+You may not place a light in a marked square, nor place a mark in a lit square.
+</p>
+<p>
+The game will highlight obvious errors in red. Lights lit by other lights are highlighted in this way, as are numbered squares which do not (or cannot) have the right number of lights next to them.
+</p>
+<p>
+Thus, the grid is solved when all non-black squares have yellow highlights and there are no red lights.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S21.2"></a>21.2 <a name="i3"></a>Light Up parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+<dt>
+<em>%age of black squares</em>
+</dt>
+<dd>
+Rough percentage of black squares in the grid.
+<p>
+This is a hint rather than an instruction. If the grid generator is unable to generate a puzzle to this precise specification, it will increase the proportion of black squares until it can.
+</p>
+
+</dd>
+<dt>
+<em>Symmetry</em>
+</dt>
+<dd>
+Allows you to specify the required symmetry of the black squares in the grid. (This does not affect the difficulty of the puzzles noticeably.)
+</dd>
+<dt>
+<em>Difficulty</em>
+</dt>
+<dd>
+&#8216;Easy&#8217; means that the puzzles should be soluble without backtracking or guessing, &#8216;Hard&#8217; means that some guesses will probably be necessary.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

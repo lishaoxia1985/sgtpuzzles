@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Solo</title>
+<link rel="previous" href="pattern.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="mines.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="pattern.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="mines.html">下一页</a></p>
+<h1><a name="C11"></a>第十一章：<a name="i0"></a>Solo</h1>
+<p>
+    一个正方形网格被分割为若干大小相等的区域（区域包含的方格数等于该网格的行数）。 每个方格必须用取值范围为1~网格宽度的数字填充，同时遵守下列规则：
+</p>
+<ul><li>
+    每行每个数字只能出现一次
+</li>
+<li>
+    每列每个数字只能出现一次
+</li>
+<li>
+    每个区域每个数字只能出现一次
+</li>
+<li>
+    可选设置（默认为关闭）：在网格的两个主要对角线中，每个对角线连线上的每个数字只能出现一次
+</li>
+</ul>
+<p>
+    游戏开始时一些数字已经被填充，您的目标是正确填充其余数字。
+</p>
+<p>
+    在默认设置下，网格分割的区域为正方形，默认的区域大小为3X3（即将9X9的网格分割为9个3X3区域）。也可以选择将分割的区域设置为矩形（如大小为3X2的区域，即将6X6的网格分割为6个3X2区域）来替代正方形。当然，您可以选择“jigsaw”模式，在该模式下，分割的区域为任意形状，各个区域形状各异。
+</p>
+<p>
+    另一种可选模式是“killer”。在这种模式下，游戏提示数字不会在方格中直接给出；相应的，网格被彩色线条划分为若干“cage”。每个“cage”标示的数字表示该“cage”中所有数字之和。同样，即使“cage”越过了网格已分割区域的边界，“cage”中也不会出现任何数字。
+</p>
+<p>
+    如果您选择的谜题中某些方格需要填充的数字大于9，大于9的数字将用字母表示。例如，如果设置的分割的区域大小为3X4，则该区域需要填充的数字将是1~9，另外再加上a、b和c。注意：“killer”模式中网格填充的数字不能大于9。
+</p>
+<p>
+    我第一次看到此谜题是在<a name="i1"></a>Nikoli <a href="#p0">[5]</a>上，尽管它已在数家报纸上以“Sudoku”或“Su Doku”之名流行多时。霍华德·加恩斯（Howard Garns）被认为是现代此类游戏的鼻祖，该谜题最早发表于《<em>Dell Pencil Puzzles and Word Games</em>》杂志。有关此谜题历史的更多详细信息可以在Wikipedia<a href="#p1">[6]</a>上找到。
+</p>
+<p><a name="p0"></a>
+[5] <a href="http://www.nikoli.co.jp/en/puzzles/sudoku.html"><code>http://www.nikoli.co.jp/en/puzzles/sudoku.html</code></a> (beware of Flash)
+</p>
+<p><a name="p1"></a>
+[6] <a href="http://en.wikipedia.org/wiki/Sudoku"><code>http://en.wikipedia.org/wiki/Sudoku</code></a>
+</p>
+<h2><a name="S11.1"></a>11.1 <a name="i2"></a>Solo controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+To play Solo, simply click the mouse in any empty square and then type a digit or letter on the keyboard to fill that square. If you make a mistake, click the mouse in the incorrect square and press Space to clear it again (or use the Undo feature).
+</p>
+<p>
+If you <em>right</em>-click in a square and then type a number, that number will be entered in the square as a &#8216;pencil mark&#8217;. You can have pencil marks for multiple numbers in the same square. Squares containing filled-in numbers cannot also contain pencil marks.
+</p>
+<p>
+The game pays no attention to pencil marks, so exactly what you use them for is up to you: you can use them as reminders that a particular square needs to be re-examined once you know more about a particular number, or you can use them as lists of the possible numbers in a given square, or anything else you feel like.
+</p>
+<p>
+To erase a single pencil mark, right-click in the square and type the same number again.
+</p>
+<p>
+All pencil marks in a square are erased when you left-click and type a number, or when you left-click and press space. Right-clicking and pressing space will also erase pencil marks.
+</p>
+<p>
+Alternatively, use the cursor keys to move the mark around the grid. Pressing the return key toggles the mark (from a normal mark to a pencil mark), and typing a number in is entered in the square in the appropriate way; typing in a 0 or using the space bar will clear a filled square.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S11.2"></a>11.2 <a name="i3"></a>Solo parameters</h2>
+<p>
+Solo allows you to configure two separate dimensions of the puzzle grid on the &#8216;Type&#8217; menu: the number of columns, and the number of rows, into which the main grid is divided. (The size of a block is the inverse of this: for example, if you select 2 columns and 3 rows, each actual block will have 3 columns and 2 rows.)
+</p>
+<p>
+If you tick the &#8216;X&#8217; checkbox, Solo will apply the optional extra constraint that the two main diagonals of the grid also contain one of every digit. (This is sometimes known as &#8216;Sudoku-X&#8217; in newspapers.) In this mode, the squares on the two main diagonals will be shaded slightly so that you know it's enabled.
+</p>
+<p>
+If you tick the &#8216;Jigsaw&#8217; checkbox, Solo will generate randomly shaped sub-blocks. In this mode, the actual grid size will be taken to be the product of the numbers entered in the &#8216;Columns&#8217; and &#8216;Rows&#8217; boxes. There is no reason why you have to enter a number greater than 1 in both boxes; Jigsaw mode has no constraint on the grid size, and it can even be a prime number if you feel like it.
+</p>
+<p>
+If you tick the &#8216;Killer&#8217; checkbox, Solo will generate a set of of cages, which are randomly shaped and drawn in an outline of a different colour. Each of these regions contains a smaller clue which shows the digit sum of all the squares in this region.
+</p>
+<p>
+You can also configure the type of symmetry shown in the generated puzzles. More symmetry makes the puzzles look prettier but may also make them easier, since the symmetry constraints can force more clues than necessary to be present. Completely asymmetric puzzles have the freedom to contain as few clues as possible.
+</p>
+<p>
+Finally, you can configure the difficulty of the generated puzzles. Difficulty levels are judged by the complexity of the techniques of deduction required to solve the puzzle: each level requires a mode of reasoning which was not necessary in the previous one. In particular, on difficulty levels &#8216;Trivial&#8217; and &#8216;Basic&#8217; there will be a square you can fill in with a single number at all times, whereas at &#8216;Intermediate&#8217; level and beyond you will have to make partial deductions about the <em>set</em> of squares a number could be in (or the set of numbers that could be in a square). At &#8216;Unreasonable&#8217; level, even this is not enough, and you will eventually have to make a guess, and then backtrack if it turns out to be wrong.
+</p>
+<p>
+Generating difficult puzzles is itself difficult: if you select one of the higher difficulty levels, Solo may have to make many attempts at generating a puzzle before it finds one hard enough for you. Be prepared to wait, especially if you have also configured a large puzzle size.
+</p>
+
+<hr><address></address></body>
+</html>

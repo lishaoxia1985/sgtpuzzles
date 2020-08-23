@@ -1,0 +1,429 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Black Box</title>
+    <link rel="previous" href="untangle.html">
+    <link rel="ToC" href="index.html">
+    <link rel="up" href="index.html">
+    <link rel="index" href="docindex.html">
+    <link rel="next" href="slant.html">
+    <style type="text/css">
+        body {
+            word-wrap: break-word;
+        }
+
+        body.night {
+            color: #dddddd;
+            background: #000000;
+        }
+
+        body.night a:link {
+            color: #8888ff;
+        }
+
+        body.night a:visited {
+            color: #cc88ff;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        table,
+        table tr td { 
+            border: 2px solid #B3B3B3; 
+            border-collapse: collapse;
+        }
+
+        tr {
+            background-color: #6A6A6A;
+        }
+
+        tr:first-child,
+        tr:last-child,
+        td:first-child,
+        td:last-child {
+            color: #000000;
+            background-color: #dddddd;
+        }
+
+        td {
+            width: 20pt;
+            height: 20pt;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <p><a href="untangle.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a
+            href="slant.html">下一页</a></p>
+    <h1><a name="C19"></a>第十九章：<a name="i0"></a>Black Box</h1>
+    <p>
+        一定数量的小球隐藏在正方形网格中。你需要通过发射位于网格边缘的激光并观察它们被反射或吸收的情况来推断球的位置。
+    </p>
+    <p>
+        除非激光受到小球以下情形之一的影响，否则光束将从发射位置出发直线传播，直至从网格的另一侧射出网格：
+    </p>
+    <ul>
+        <li>
+            正面射向小球的光束将会被小球完全吸收并永远不会再出现，如果激光发射位置与小球相邻，则该处发射的光束同样会被小球吸收。此种情况下，将认定该激光是被“吸收”的。</li>
+        <li>
+            如果光束的左前方有一个小球，且光束前方没有球，光束会向右偏转90°。</li>
+        <li>
+            如果光束的右前方有一个小球，且光束前方没有球，光束会向左偏转90°。</li>
+        <li>
+            如果光束的左前方和右前方各有一个小球，且光束前方没有球，光束会偏转180°沿原路反射回去。</li>
+        <li>
+            激光发射后，由于小球的影响被反射回发射位置然后射出网格，将认定该激光是被“反射”的。</li>
+        <li>
+            由于发射位置的左前方或右前方存在小球，且正前方没有球，激光直接在发射位置发生偏转未射入网格，也认定该激光是被“反射”的。</li>
+    </ul>
+    <p>
+        根据激光受到小球影响被反射和吸收的情况，对激光发射位置标记如下：
+    </p>
+    <ul>
+        <li>如果激光从该处发射后被小球完全吸收，则此发射位置标记为“H”。</li>
+        <li>如果激光从该处发射后又被反射回来从该处射出网格，则此发射位置标记为“R”。</li>
+        <li>由于该处的左前方或右前方存在小球，且正前方没有球，激光直接在该处发生偏转未射入网格，则此发射位置同样标记为“R”。</li>
+        <li>如果激光从该处发射从另一处位置射出网格，则将该发射位置和相应的射出网格位置标记为一组相同的数字（该组数字在一轮游戏中是唯一的）。</li>
+    </ul>
+    <p>
+        你可以根据激光被反射和吸收的情况来推断小球在网格中的位置；当你在网格中放置了足够数量的小球时，一个按钮将会出现，点击该按钮可以对你的推断进行检查。
+    </p>
+    <p>
+        下图展示了球的位置是如何影响激光传播的：
+    </p>
+    <table>
+        <tr>
+            <td></td>
+            <td>1</td>
+            <td>R</td>
+            <td>H</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>H</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>1</td>
+            <td>2</td>
+            <td></td>
+            <td>R</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p>
+        如图所示，光束在网格中传播时可能会经过多次反射（例如标记“3”的位置发射的激光）。同样的，光束正面射向小球且被小球完全吸收前（例如左侧标记“H”的位置发射的激光）同样可能会经过反射（有时还不止一次）。
+    </p>
+    <p>
+        注意，任何超过4个球的谜题，球在网格中的位置布局都有可能不是唯一的。下图说明了这一点；虽然你知道网格中共有5个球，但不可能确定第五个球的确切位置（它可能位于网格上标记为“X”的任意一处）：
+    </p>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>X</td>
+            <td>X</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>X</td>
+            <td>X</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td>⚫</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p>
+        因此，当游戏对你的推断进行检查时，游戏机制将检查你的小球布局方案是否正确，而不是你的布局方案是否与电脑的布局方案相同。因此，在上面的例子中，你可以把第五个球放在网格上标记为“X”的任意一处，就可以赢得胜利。
+    </p>
+    <p>
+        “Black Box”游戏是由James Harvey贡献的。
+    </p>
+    <h2><a name="S19.1"></a>19.1 <a name="i1"></a>Black Box controls</h2>
+    <p>
+        <em>On Android, please touch for left click and long press for right click. Also note that where this manual
+            refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen
+            instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker
+            colours in low light.</em>
+    </p>
+    <p>
+        To fire a laser beam, left-click in a square around the edge of the arena. The results will be displayed
+        immediately. Clicking or holding the left button on one of these squares will highlight the current go (or a
+        previous go) to confirm the exit point for that laser, if applicable.
+    </p>
+    <p>
+        To guess the location of a ball, left-click within the arena and a black circle will appear marking the guess;
+        click again to remove the guessed ball.
+    </p>
+    <p>
+        Locations in the arena may be locked against modification by right-clicking; whole rows and columns may be
+        similarly locked by right-clicking in the laser square above/below that column, or to the left/right of that
+        row.
+    </p>
+    <p>
+        The cursor keys may also be used to move around the grid. Pressing the Enter key will fire a laser or add a new
+        ball-location guess, and pressing Space will lock a cell, row, or column.
+    </p>
+    <p>
+        When an appropriate number of balls have been guessed, a button will appear at the top-left corner of the grid;
+        clicking that (with mouse or cursor) will check your guesses.
+    </p>
+    <p>
+        If you click the &#8216;check&#8217; button and your guesses are not correct, the game will show you the minimum
+        information necessary to demonstrate this to you, so you can try again. If your ball positions are not
+        consistent with the beam paths you already know about, one beam path will be circled to indicate that it proves
+        you wrong. If your positions match all the existing beam paths but are still wrong, one new beam path will be
+        revealed (written in red) which is not consistent with your current guesses.
+    </p>
+    <p>
+        If you decide to give up completely, you can select Solve to reveal the actual ball positions. At this point,
+        correctly-placed balls will be displayed as filled black circles, incorrectly-placed balls as filled black
+        circles with red crosses, and missing balls as filled red circles. In addition, a red circle marks any laser you
+        had already fired which is not consistent with your ball layout (just as when you press the &#8216;check&#8217;
+        button), and red text marks any laser you <em>could</em> have fired in order to distinguish your ball layout
+        from the correct one.
+    </p>
+    <p>
+        (All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+    </p>
+    <h2><a name="S19.2"></a>19.2 <a name="i2"></a>Black Box parameters</h2>
+    <p>
+        These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+    </p>
+    <dl>
+        <dt>
+            <em>Width</em>, <em>Height</em>
+        </dt>
+        <dd>
+            Size of grid in squares. There are 2 &#215; <em>Width</em> &#215; <em>Height</em> lasers per grid, two per
+            row and two per column.
+        </dd>
+        <dt>
+            <em>No. of balls</em>
+        </dt>
+        <dd>
+            Number of balls to place in the grid. This can be a single number, or a range (separated with a hyphen, like
+            &#8216;2-6&#8217;), and determines the number of balls to place on the grid. The &#8216;reveal&#8217; button
+            is only enabled if you have guessed an appropriate number of balls; a guess using a different number to the
+            original solution is still acceptable, if all the beam inputs and outputs match.
+        </dd>
+    </dl>
+
+    <hr>
+    <address></address>
+</body>
+
+</html>

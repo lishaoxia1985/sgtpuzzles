@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Tents</title>
+<link rel="previous" href="inertia.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="bridges.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="inertia.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="bridges.html">下一页</a></p>
+<h1><a name="C25"></a>第二十五章：<a name="i0"></a>Tents</h1>
+<p>
+    一个正方形网格，其中一些包含树木。您的任务是遵守以下规则将帐篷放置在方格中：
+</p>
+<ul><li>
+    帐篷和树木一样多。
+</li>
+<li>
+    帐篷和树木按照这样的规则分布：每个帐篷都有一棵树木与之相邻（水平或垂直方向，对角线方向相邻的不算相邻）。当然，与帐篷相邻的树木可能大于一颗。
+</li>
+<li>
+    所有帐篷互不相邻（水平或垂直方向，<em>对角线</em>方向也不能相邻）。
+</li>
+<li>
+    每行（列）的帐篷数量应满足网格边缘的数字提示。
+</li>
+</ul>
+<p>
+    此谜题可以在Internet的很多网站上找到，有人通过电子邮件分享给我，勾起了我的兴趣。我不知道究竟谁发明了它。
+</p>
+<h2><a name="S25.1"></a>25.1 <a name="i1"></a>Tents controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+Left-clicking in a blank square will place a tent in it. Right-clicking in a blank square will colour it green, indicating that you are sure it <em>isn't</em> a tent. Clicking either button in an occupied square will clear it.
+</p>
+<p>
+If you <em>drag</em> with the right button along a row or column, every blank square in the region you cover will be turned green, and no other squares will be affected. (This is useful for clearing the remainder of a row once you have placed all its tents.)
+</p>
+<p>
+You can also use the cursor keys to move around the grid. Pressing the return key over an empty square will place a tent, and pressing the space bar over an empty square will colour it green; either key will clear an occupied square. Holding Shift and pressing the cursor keys will colour empty squares green. Holding Control and pressing the cursor keys will colour green both empty squares and squares with tents.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S25.2"></a>25.2 <a name="i2"></a>Tents parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+<dt>
+<em>Difficulty</em>
+</dt>
+<dd>
+Controls the difficulty of the generated puzzle. More difficult puzzles require more complex deductions, but at present none of the available difficulty levels requires guesswork or backtracking.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

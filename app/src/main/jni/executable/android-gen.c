@@ -6,6 +6,11 @@
 
 #define USAGE "Usage: puzzles-gen gamename [params | --seed seed | --desc desc]\n"
 
+extern const game* game_by_name(const char *name);
+extern game_params* oriented_params_from_str(const game* game, const char* params, const char** error);
+
+enum { DEF_PARAMS, DEF_SEED, DEF_DESC };
+
 void serialise_write(void *ctx, const void *buf, int len) {
 	write(1, buf, (size_t) len);
 }
@@ -23,7 +28,7 @@ int main(int argc, const char *argv[]) {
 		exit(1);
 	}
 	int defmode = DEF_PARAMS;
-	if (argc >= 4) {
+	if (argc == 4) {
 		if (!strcmp(argv[2], "--seed")) {
 			defmode = DEF_SEED;
 		} else if (!strcmp(argv[2], "--desc")) {
@@ -50,7 +55,7 @@ int main(int argc, const char *argv[]) {
 		params = oriented_params_from_str(thegame, (argc >= 3 && strlen(argv[2]) > 0) ? argv[2] : NULL, &error);
 	} else {
 		char *tmp = dupstr(argv[3]);
-		error = midend_game_id_int(fe->me, tmp, defmode, false);
+		error = midend_game_id(fe->me, tmp);
 		sfree(tmp);
 	}
 	if (error) {

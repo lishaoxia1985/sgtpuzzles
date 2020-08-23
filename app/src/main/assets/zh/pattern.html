@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Pattern</title>
+<link rel="previous" href="netslide.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="solo.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="netslide.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="solo.html">下一页</a></p>
+<h1><a name="C10"></a>第十章：<a name="i0"></a>Pattern</h1>
+<p>
+    一个正方形网格，必须全部用黑色或白色填充。网格每行（列）旁边标示的一组数字表示该行（列）根据数字排列次序依次出现的黑色连续区域的长度。您的目标是用黑色或白色填充整个网格。
+</p>
+<p>
+    我第一次看到这种谜题形式是在1995年左右，名称是“nonograms”；从那以后，我在不同的地方以不同的名字见到过它。
+</p>
+<p>
+    通常情况下，此类谜题的谜底是一副传达了某种信息的图片。但是，本版本不同，此版本自动生成的网格黑白填充方案，看起来像是黑白方格在网格中随机分布。（这源自于一个玩家的建议，而且实际上是<em>非常好</em>的建议，因为可以防止玩家根据图片所传递的信息猜测方格的颜色，使得你只能依靠逻辑推理来解决谜题）优点是每一次新的游戏开局，都是一次全新的旅程。
+</p>
+<h2><a name="S10.1"></a>10.1 <a name="i2"></a>Pattern controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+This game is played with the mouse.
+</p>
+<p>
+Left-click in a square to colour it black. Right-click to colour it white. If you make a mistake, you can middle-click, or hold down Shift while clicking with any button, to colour the square in the default grey (meaning &#8216;undecided&#8217;) again.
+</p>
+<p>
+You can click and drag with the left or right mouse button to colour a vertical or horizontal line of squares black or white at a time (respectively). If you click and drag with the middle button, or with Shift held down, you can colour a whole rectangle of squares grey.
+</p>
+<p>
+You can also move around the grid with the cursor keys. Pressing the return key will cycle the current cell through empty, then black, then white, then empty, and the space bar does the same cycle in reverse.
+</p>
+<p>
+Moving the cursor while holding Control will colour the moved-over squares black. Holding Shift will colour the moved-over squares white, and holding both will colour them grey.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S10.2"></a>10.2 <a name="i3"></a>Pattern parameters</h2>
+<p>
+The only options available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu are <em>Width</em> and <em>Height</em>, which are self-explanatory.
+</p>
+
+<hr><address></address></body>
+</html>

@@ -45,6 +45,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -167,8 +168,8 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	String currentBackend = null;
 	private String startingBackend = null;
 	private Thread worker;
-	private String lastKeys = "", lastKeysIfArrows = "";
-	private static final File storageDir = Environment.getDataDirectory();
+	private String lastKeys = "";
+	private static final File storageDir = Environment.getExternalStorageDirectory();
 	private String[] games;
 	private Menu menu;
 	private String maybeUndoRedo = "" + ((char)UI_UNDO) + ((char)UI_REDO);
@@ -204,15 +205,13 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	final Handler handler = new PuzzlesHandler(this);
 
 	private void handleMessage(Message msg) {
-		switch( MsgType.values()[msg.what] ) {
-		case TIMER:
-			if( progress == null ) timerTick();
-			if( gameWantsTimer ) {
+		if (MsgType.values()[msg.what] == MsgType.TIMER) {
+			if (progress == null) timerTick();
+			if (gameWantsTimer) {
 				handler.sendMessageDelayed(
 						handler.obtainMessage(MsgType.TIMER.ordinal()),
 						TIMER_INTERVAL);
 			}
-			break;
 		}
 	}
 
@@ -795,14 +794,13 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		final PopupMenu typeMenu = new PopupMenu(GamePlay.this, findViewById(R.id.type_menu));
 		typeMenu.getMenuInflater().inflate(R.menu.type_menu, typeMenu.getMenu());
 		for (final MenuEntry entry : menuEntries) {
+			final MenuItem added = typeMenu.getMenu().add(R.id.typeGroup, entry.getId(), Menu.NONE, entry.getTitle());
 			if (entry.getParams() != null) {
-				final MenuItem added = typeMenu.getMenu().add(R.id.typeGroup, entry.getId(), Menu.NONE, entry.getTitle());
 				added.setOnMenuItemClickListener(TYPE_CLICK_LISTENER);
 				if (currentType == entry.getId()) {
 					added.setChecked(true);
 				}
 			} else {
-				final MenuItem added = typeMenu.getMenu().add(R.id.typeGroup, entry.getId(), Menu.NONE, entry.getTitle());
 				if (menuContainsCurrent(entry.getSubmenu())) {
 					added.setChecked(true);
 				}
@@ -974,9 +972,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				return;
 			}
 			startingBackend = currentBackend;
-			if (currentBackend != null) {
-				requestKeys(currentBackend, getCurrentParams());
-			}
 		});
 
 	}
@@ -1063,7 +1058,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		}
 		final String previousGame;
 		if (isRedo || launch.needsGenerating()) {
-			purgeStates();
 			redoToGame = null;
 			previousGame = saveToString();
 		} else {
@@ -1119,19 +1113,17 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 						}
 						args.add(params);
 					}
-					final String finalParams = params;
-					runOnUiThread(() -> requestKeys(startingBackend, finalParams));
 					String generated = generateGame(args);
 					if (generated != null) {
 						launch.finishedGenerating(generated);
 					} else if (workerRunning) {
 						throw new IOException("Internal error generating game: result is blank");
 					}
-					startGameConfirmed(true, launch, previousGame);
+					startGameConfirmed(launch, previousGame);
 				} else if (!launch.isOfLocalState() && launch.getSaved() != null) {
-					warnOfStateLoss(launch.getSaved(), () -> startGameConfirmed(false, launch, previousGame), launch.isFromChooser());
+					warnOfStateLoss(launch.getSaved(), () -> startGameConfirmed(launch, previousGame), launch.isFromChooser());
 				} else {
-					startGameConfirmed(false, launch, previousGame);
+					startGameConfirmed(launch, previousGame);
 				}
 			} catch (IllegalArgumentException e) {
 				abort(e.getMessage(), launch.isFromChooser());  // probably bogus params
@@ -1142,7 +1134,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		}}).start();
 	}
 
-	private void startGameConfirmed(final boolean generating, final GameLaunch launch, final String previousGame) {
+	private void startGameConfirmed(final GameLaunch launch, final String previousGame) {
 		final String toPlay = launch.getSaved();
 		final String gameID = launch.getGameID();
 		if (toPlay == null && gameID == null) {
@@ -1201,17 +1193,12 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			solveEnabled = (flags & UIVisibility.SOLVE.getValue()) > 0;
 			setStatusBarVisibility((flags & UIVisibility.STATUS.getValue()) > 0);
 
-			if (!generating) {  // we didn't know params until we loaded the game
-				requestKeys(currentBackend, currentParams);
-			}
-			inertiaFollow(false);
 			// We have a saved completion flag but completion could have been done; find out whether
 			// it's really completed
 			if (launch.isOfLocalState() && !launch.isUndoingOrRedoing() && isCompletedNow()) {
 				completed();
 			}
 			final boolean hasArrows = computeArrowMode(currentBackend).hasArrows();
-			setCursorVisibility(hasArrows);
 			if (changingGame) {
 				if (prefs.getBoolean(CONTROLS_REMINDERS_KEY, true)) {
 					if (hasArrows || !showToastIfExists("toast_no_arrows_" + currentBackend)) {
@@ -1437,8 +1424,9 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			mainLayout.updateViewLayout(gameView, glp);
 		}
 		final SmallKeyboard.ArrowMode arrowMode = computeArrowMode(whichBackend);
-		final boolean shouldHaveSwap = (lastArrowMode == SmallKeyboard.ArrowMode.ARROWS_LEFT_RIGHT_CLICK)
+		final boolean shouldHaveSwap = (arrowMode == SmallKeyboard.ArrowMode.ARROWS_LEFT_RIGHT_CLICK)
 				|| "palisade".equals(whichBackend)
+				|| "loopy".equals(whichBackend)
 				|| "net".equals(whichBackend);
 		final String maybeSwapLRKey = shouldHaveSwap ? String.valueOf(SmallKeyboard.SWAP_L_R_KEY) : "";
 		keyboard.setKeys((c.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO)
@@ -1467,7 +1455,16 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		final boolean arrowPref = prefs.getBoolean(
 				getArrowKeysPrefName(whichBackend, getResources().getConfiguration()),
 				getArrowKeysDefault(whichBackend, getResources(), getPackageName()));
-		return arrowPref ? lastArrowMode : SmallKeyboard.ArrowMode.NO_ARROWS;
+		if (arrowPref) {
+			if (("inertia").contains(whichBackend))
+				return SmallKeyboard.ArrowMode.ARROWS_DIAGONALS;
+			if (("cube" + "fifteen" + "palisade" + "net").contains(whichBackend))
+				return SmallKeyboard.ArrowMode.ARROWS_ONLY;
+			if (("flip" + "flood" + "pegs" + "towers" + "undead" + "keen" + "unequal" + "solo").contains(whichBackend))
+				return SmallKeyboard.ArrowMode.ARROWS_LEFT_CLICK;
+			else return SmallKeyboard.ArrowMode.ARROWS_LEFT_RIGHT_CLICK;
+		}
+		else return SmallKeyboard.ArrowMode.NO_ARROWS;
 	}
 
 	private static boolean hasDpadOrTrackball(Configuration c) {
@@ -1483,11 +1480,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				|| (startingBackend.equals("unequal") && !prefs.getBoolean(UNEQUAL_SHOW_H_KEY, false)))) {
 			filtered = filtered.replace("H", "");
 		}
-		if (arrowMode.hasArrows()) {
-			filtered = lastKeysIfArrows + filtered;
-		} else if (filtered.length() == 1 && filtered.charAt(0) == '\b') {
-			filtered = "";
-		}
+		if (!arrowMode.hasArrows() && filtered.length() == 1 && filtered.charAt(0) == '\b') filtered = "";
 		return filtered;
 	}
 
@@ -1562,7 +1555,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		}
 	}
 
-	@UsedByJNI
 	void completed() {
 		handler.postDelayed(() -> {
 			try {
@@ -1571,11 +1563,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				// fine, nothing we can do here
 			}
 		}, 0);
-	}
-
-	@UsedByJNI
-	void inertiaFollow(final boolean isSolved) {
-		keyboard.setInertiaFollowEnabled(isSolved || !"inertia".equals(currentBackend));
 	}
 
 	private void completedInternal() {
@@ -1587,10 +1574,10 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			return;
 		}
 		final Dialog d = new Dialog(this, R.style.Dialog_Completed);
-		//noinspection ConstantConditions
 		WindowManager.LayoutParams lp = d.getWindow().getAttributes();
 		lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 		d.getWindow().setAttributes(lp);
+		d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		d.setContentView(R.layout.completed);
 		final TextView title = d.findViewById(R.id.completedTitle);
 		title.setText(titleText);
@@ -1798,17 +1785,12 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		savingState.append(new String(buffer));
 	}
 
-	private SmallKeyboard.ArrowMode lastArrowMode = SmallKeyboard.ArrowMode.NO_ARROWS;
-
 	@UsedByJNI
-	void setKeys(final String keys, final String keysIfArrows, SmallKeyboard.ArrowMode arrowMode)
+	void setKeys(final String keys)
 	{
-		if (arrowMode == null) arrowMode = SmallKeyboard.ArrowMode.ARROWS_LEFT_RIGHT_CLICK;
-		lastArrowMode = arrowMode;
 		lastKeys = (keys == null) ? "" : keys;
-		lastKeysIfArrows = (keysIfArrows == null) ? "" : keysIfArrows;
-		gameView.setHardwareKeys(lastKeys + lastKeysIfArrows);
-		setKeyboardVisibility(startingBackend, getResources().getConfiguration());
+		gameView.setHardwareKeys(lastKeys);
+		runOnUiThread(() -> setKeyboardVisibility(startingBackend, getResources().getConfiguration()));
 		keysAlreadySet = true;
 	}
 
@@ -1819,7 +1801,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		final Configuration configuration = getResources().getConfiguration();
 		if (key.equals(getArrowKeysPrefName(currentBackend, configuration))) {
 			setKeyboardVisibility(startingBackend, configuration);
-			setCursorVisibility(computeArrowMode(startingBackend).hasArrows());
 			gameViewResized();  // cheat - we just want a redraw in case size unchanged
 		} else if (key.equals(FULLSCREEN_KEY)) {
 			applyFullscreen(true);  // = already started
@@ -1940,31 +1921,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		setKeyboardVisibility(startingBackend, getResources().getConfiguration());
 	}
 
-	@UsedByJNI
-	String gettext(String s)
-	{
-		if (s.startsWith(":")) {
-			String[] choices = s.substring(1).split(":");
-			StringBuilder ret = new StringBuilder();
-			for (String choice : choices) ret.append(":").append(gettext(choice));
-			return ret.toString();
-		}
-		String id = s
-				.replaceAll("^([0-9])","_$1")
-				.replaceAll("%age","percentage")
-				.replaceAll("','","comma")
-				.replaceAll("%[.0-9]*u?[sd]","X")
-				.replaceAll("[^A-Za-z0-9_]+", "_");
-		if( id.endsWith("_") ) id = id.substring(0,id.length()-1);
-		int resId = getResources().getIdentifier(id, "string", getPackageName());
-		if (resId > 0) {
-			return getString(resId);
-		}
-		Log.i(TAG, "gettext: NO TRANSLATION: " + s + " -> " + id + " -> ???");
-		return s;
-	}
-
-	@UsedByJNI
 	void changedState(final boolean canUndo, final boolean canRedo) {
 		runOnUiThread(() -> {
 			undoEnabled = canUndo || undoToGame != null;
@@ -1972,18 +1928,18 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			redoEnabled = canRedo || redoToGame != null;
 			redoIsLoadGame = !canRedo && redoToGame != null;
 			if (keyboard != null) {
-				keyboard.setUndoRedoEnabled(undoEnabled, redoEnabled);
+				keyboard.setUndoRedoEnabled(true, true);
 			}
 			if (menu != null) {
 				MenuItem mi;
 				mi = menu.findItem(R.id.undo);
 				if (mi != null) {
-					mi.setEnabled(undoEnabled);
+					mi.setEnabled(true);
 					mi.setIcon(undoEnabled ? R.drawable.ic_action_undo : R.drawable.ic_action_undo_disabled);
 				}
 				mi = menu.findItem(R.id.redo);
 				if (mi != null) {
-					mi.setEnabled(redoEnabled);
+					mi.setEnabled(true);
 					mi.setIcon(redoEnabled ? R.drawable.ic_action_redo : R.drawable.ic_action_redo_disabled);
 				}
 			}
@@ -2021,12 +1977,9 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	native void serialise();
 	native static int identifyBackend(String savedGame);
 	native String getCurrentParams();
-	native void requestKeys(String backend, String params);
-	native void setCursorVisibility(boolean visible);
 	native MenuEntry[] getPresets();
 	native int getUIVisibility();
 	native void resetTimerBaseline();
-	native void purgeStates();
 	native boolean isCompletedNow();
 
 	static {

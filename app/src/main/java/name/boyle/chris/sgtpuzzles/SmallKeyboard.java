@@ -1,10 +1,5 @@
 package name.boyle.chris.sgtpuzzles;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,17 +9,24 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboardActionListener
 {
 	private static final String TAG = "SmallKeyboard";
 	private static final String SEEN_SWAP_L_R_TOAST = "seenSwapLRToast";
 	private final GamePlay parent;
-	private boolean undoEnabled = false, redoEnabled = false, followEnabled = true;
+	private boolean undoEnabled = false;
+	private boolean redoEnabled = false;
 	private String backendForIcons;
 	public static final char SWAP_L_R_KEY = '*';
 	private boolean swapLR = false;
@@ -281,7 +283,7 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 					key.codes = new int[] { GameView.UI_REDO };
 					return;
 				case '\b':
-					key.icon = trySpecificIcon(context.getResources(), R.drawable.sym_key_backspace);
+					key.icon = ContextCompat.getDrawable(context, android.R.drawable.ic_input_delete);
 					key.repeatable = true;
 					key.enabled = true;
 					break;
@@ -359,29 +361,25 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 				case GameView.CURSOR_UP:
 					key.x = arrowsRightEdge  - 2*keyPlusPad;
 					key.y = arrowsBottomEdge - arrowRows*keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_north);
+					key.label = String.valueOf('↑');
 					key.edgeFlags = maybeTop;
 					break;
 				case GameView.CURSOR_DOWN:
 					key.x = arrowsRightEdge  - 2*keyPlusPad;
 					key.y = arrowsBottomEdge -   keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_south);
+					key.label = String.valueOf('↓');
 					key.edgeFlags = EDGE_BOTTOM;
 					break;
 				case GameView.CURSOR_LEFT:
 					key.x = arrowsRightEdge  - 3*keyPlusPad;
 					key.y = arrowsBottomEdge - leftRightRow*keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_west);
+					key.label = String.valueOf('←');
 					key.edgeFlags = bottomIf2Row | maybeLeft;
 					break;
 				case GameView.CURSOR_RIGHT:
 					key.x = arrowsRightEdge  -   keyPlusPad;
 					key.y = arrowsBottomEdge - leftRightRow*keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_east);
+					key.label = String.valueOf('→');
 					key.edgeFlags = bottomIf2Row | EDGE_RIGHT;
 					break;
 				case '\n':
@@ -402,29 +400,25 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 				case GameView.MOD_NUM_KEYPAD | '7':
 					key.x = arrowsRightEdge  - 3*keyPlusPad;
 					key.y = arrowsBottomEdge - 3*keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_north_west);
+					key.label = String.valueOf('↖');
 					key.edgeFlags = maybeTop | maybeLeft;
 					break;
 				case GameView.MOD_NUM_KEYPAD | '1':
 					key.x = arrowsRightEdge  - 3*keyPlusPad;
 					key.y = arrowsBottomEdge -   keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_south_west);
+					key.label = String.valueOf('↙');
 					key.edgeFlags = EDGE_BOTTOM | maybeLeft;
 					break;
 				case GameView.MOD_NUM_KEYPAD | '9':
 					key.x = arrowsRightEdge  -   keyPlusPad;
 					key.y = arrowsBottomEdge - 3*keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_north_east);
+					key.label = String.valueOf('↗');
 					key.edgeFlags = maybeTop | EDGE_RIGHT;
 					break;
 				case GameView.MOD_NUM_KEYPAD | '3':
 					key.x = arrowsRightEdge  -   keyPlusPad;
 					key.y = arrowsBottomEdge -   keyPlusPad;
-					key.icon = ContextCompat.getDrawable(context,
-							R.drawable.sym_key_south_east);
+					key.label = String.valueOf('↘');
 					key.edgeFlags = EDGE_BOTTOM | EDGE_RIGHT;
 					break;
 				default:
@@ -505,15 +499,6 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 			if (initDone) keyboardView.invalidateKey(i);
 		}
 
-		void setInertiaFollowEnabled(final boolean enabled) {
-			followEnabled = enabled;
-			if (primaryKey == -1 || swapLR) return;  // can't swapLR in inertia
-			final DKey k = (DKey)mKeys.get(primaryKey);
-			k.enabled = enabled;
-			k.icon = enabled ? trySpecificIcon(context.getResources(), R.drawable.sym_key_mouse_left) : null;
-			if (initDone) keyboardView.invalidateKey(primaryKey);
-		}
-
 		@Override
 		public List<Key> getKeys() { return mKeys; }
 		@Override
@@ -564,7 +549,7 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 		int maxPx = MeasureSpec.getSize(landscape ? hSpec : wSpec);
 		// Doing this here seems the only way to be sure of dimensions.
 		final KeyboardModel model = new KeyboardModel(getContext(), this, isInEditMode(), lastKeys,
-				arrowMode, landscape, maxPx, undoEnabled, redoEnabled, followEnabled, backendForIcons);
+				arrowMode, landscape, maxPx, undoEnabled, redoEnabled, true, backendForIcons);
 		setKeyboard(model);
 		model.setSwapLR(swapLR, false);
 		if (model.isEmpty()) {
@@ -590,13 +575,6 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 		if (m == null) return;
 		m.setUndoRedoEnabled(KeyboardModel.ExtraKey.UNDO, canUndo);
 		m.setUndoRedoEnabled(KeyboardModel.ExtraKey.REDO, canRedo);
-	}
-
-	void setInertiaFollowEnabled(final boolean enabled) {
-		followEnabled = enabled;
-		KeyboardModel m = (KeyboardModel)getKeyboard();
-		if (m == null) return;
-		m.setInertiaFollowEnabled(enabled);
 	}
 
 	void setSwapLR(final boolean swap) {

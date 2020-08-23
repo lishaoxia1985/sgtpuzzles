@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Towers</title>
+<link rel="previous" href="keen.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="singles.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="keen.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="singles.html">下一页</a></p>
+<h1><a name="C31"></a>第三十一章：<a name="i0"></a>Towers</h1>
+<p>
+    一个正方形网格，您可以在每个方格上建造一座塔（塔的高度取值范围1~网格宽度），网格边缘有一些数字提示。
+</p>
+<p>
+    您的任务是按照如下规则在每个方格上建造一座塔：
+</p>
+<ul><li>
+    每行建造的塔必须包含塔的所有可能高度
+</li>
+<li>
+    每列建造的塔必须包含塔的所有可能高度
+</li>
+<li>
+    网格边缘的数字表示从数字所在位置向网格看能看到的塔的个数。游戏机制中，高度较低的塔会因被高度较高的塔遮挡而无法看到。 例如，在5X5的网格中，网格边缘标记的数字5表示五座塔必须从数字所在位置相邻的方格起按高度升序依次排列（否则，您将无法看到所有五座塔），而网格边缘标记的数字1则表示最高的塔（即高度为5的塔）位于数字所在位置相邻的方格（也就是说其余塔皆被遮挡）。
+</li>
+</ul>
+<p>
+    在难度较大的谜题中，一些塔游戏开始时已经被建造，同时网格边缘可能缺少一些数字提示。
+</p>
+<p>
+    此谜题以各种各样的名字出现在网络上，这些名字中尤其以“Skyscrapers”最为著名，但我不知道谁是它的第一个发明者。
+</p>
+<h2><a name="S31.1"></a>31.1 <a name="i2"></a>Towers controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+Towers shares much of its control system with Solo, Unequal and Keen.
+</p>
+<p>
+To play Towers, simply click the mouse in any empty square and then type a digit on the keyboard to fill that square with a tower of the given height. If you make a mistake, click the mouse in the incorrect square and press Space to clear it again (or use the Undo feature).
+</p>
+<p>
+If you <em>right</em>-click in a square and then type a number, that number will be entered in the square as a &#8216;pencil mark&#8217;. You can have pencil marks for multiple numbers in the same square. A square containing a tower cannot also contain pencil marks.
+</p>
+<p>
+The game pays no attention to pencil marks, so exactly what you use them for is up to you: you can use them as reminders that a particular square needs to be re-examined once you know more about a particular number, or you can use them as lists of the possible numbers in a given square, or anything else you feel like.
+</p>
+<p>
+To erase a single pencil mark, right-click in the square and type the same number again.
+</p>
+<p>
+All pencil marks in a square are erased when you left-click and type a number, or when you left-click and press space. Right-clicking and pressing space will also erase pencil marks.
+</p>
+<p>
+As for Solo, the cursor keys can be used in conjunction with the digit keys to set numbers or pencil marks. Use the cursor keys to move a highlight around the grid, and type a digit to enter it in the highlighted square. Pressing return toggles the highlight into a mode in which you can enter or remove pencil marks.
+</p>
+<p>
+Pressing M will fill in a full set of pencil marks in every square that does not have a main digit in it.
+</p>
+<p>
+Left-clicking a clue will mark it as done (grey it out), or unmark it if it is already marked. Holding Control or Shift and pressing an arrow key likewise marks any clue in the given direction.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S31.2"></a>31.2 <a name="i3"></a>Towers parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Grid size</em>
+</dt>
+<dd>
+Specifies the size of the grid. Lower limit is 3; upper limit is 9 (because the user interface would become more difficult with &#8216;digits&#8217; bigger than 9!).
+</dd>
+<dt>
+<em>Difficulty</em>
+</dt>
+<dd>
+Controls the difficulty of the generated puzzle. At Unreasonable level, some backtracking will be required, but the solution should still be unique. The remaining levels require increasingly complex reasoning to avoid having to backtrack.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

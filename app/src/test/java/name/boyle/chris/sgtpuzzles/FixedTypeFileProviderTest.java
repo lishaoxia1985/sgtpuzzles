@@ -2,7 +2,7 @@ package name.boyle.chris.sgtpuzzles;
 
 import android.net.Uri;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

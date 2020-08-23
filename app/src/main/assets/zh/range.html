@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Range</title>
+<link rel="previous" href="signpost.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="pearl.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="signpost.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="pearl.html">下一页</a></p>
+<h1><a name="C35"></a>第三十五章：<a name="i0"></a>Range</h1>
+<p>
+    一个正方形网格，一些方格包含数字。您的工作是遵守下列规则将一些方格涂成黑色：
+</p>
+<ul><li>
+    标记数字的方格不能被涂成黑色。
+</li>
+<li>
+    所有的黑色方格互不相邻（水平或垂直方向）。
+</li>
+<li>
+    所有的白色方格互相连接，整体上形成一个连续区域。
+</li>
+<li>
+    每个包含数字的方格，该数字表示从该方格出发水平或垂直方向（直至到达网格边缘或被黑色方格阻挡）所能到达的白色方格总数，注意，此包含数字的方格本身也计算在内（只计算一次）。
+</li>
+</ul>
+<p>
+    例如，根据最后一条规则，包含数字1的方格只能有四个黑色方格与其相邻。但是这样它就不可能与其他白色方格相连，这违反了倒数第二条规则。因此，没有方格包含数字1。
+</p>
+<p>
+    此谜题来自于<a name="i1"></a>Nikoli，他曾以很多不同的名字称呼它，其中包括“Kurodoko”、“Kuromasu”、“Where is Black Cells”<a href="#p0">[18]</a>。
+</p>
+<p>
+    “Range”游戏是由Jonas Kölker贡献的。
+</p>
+<p><a name="p0"></a>
+[18] <a href="http://www.nikoli.co.jp/en/puzzles/where_is_black_cells.html"><code>http://www.nikoli.co.jp/en/puzzles/where_is_black_cells.html</code></a>
+</p>
+<h2><a name="S35.1"></a>35.1 <a name="i2"></a>Range controls</h2>
+<p>
+<em>On Android, please touch for left click and long press for right click. Also note that where this manual refers to pressing a letter on the keyboard, the Android version has icons at the bottom of the screen instead (Control and Shift are not available). There is also an optional "Night mode" which uses darker colours in low light.</em>
+</p>
+<p>
+Click with the left button to paint a square black, or with the right button to mark a square with a dot to indicate that you are sure it should <em>not</em> be painted black. Repeated clicking with either button will cycle the square through the three possible states (filled, dotted or empty) in opposite directions.
+</p>
+<p>
+You can also use the cursor keys to move around the grid squares. Pressing Return does the same as clicking with the left button, while pressing Space does the same as a right button click. Moving with the cursor keys while holding Shift will place dots in all squares that are moved through.
+</p>
+<p>
+(All the actions described in <a href="common.html#S2.1">section 2.1</a> are also available.)
+</p>
+<h2><a name="S35.2"></a>35.2 <a name="i3"></a>Range parameters</h2>
+<p>
+These parameters are available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu.
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

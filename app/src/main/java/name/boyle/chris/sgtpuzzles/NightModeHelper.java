@@ -8,9 +8,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
-import androidx.preference.PreferenceManager;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 public class NightModeHelper implements SensorEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 	static final String NIGHT_MODE_KEY = "nightMode";
@@ -25,7 +26,7 @@ public class NightModeHelper implements SensorEventListener, SharedPreferences.O
 	private final SharedPreferences prefs;
 	private final SharedPreferences state;
 	private final Context context;
-	private SensorManager sensorManager;
+	private final SensorManager sensorManager;
 	private Sensor lightSensor;
 
 	enum NightMode { ON, AUTO, OFF }
