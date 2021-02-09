@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Mosaic</title>
+<link rel="previous" href="solo.html">
+<link rel="ToC" href="index.html">
+<link rel="up" href="index.html">
+<link rel="index" href="docindex.html">
+<link rel="next" href="samegame.html">
+<style type="text/css">body { word-wrap: break-word; } body.night { color: #dddddd; background: #000000; } body.night a:link { color: #8888ff; } body.night a:visited { color: #cc88ff; }</style></head>
+<body>
+<p><a href="palisade.html">前一页</a> | <a href="index.html">目录</a> | <a href="docindex.html">索引</a> | <a href="licence.html">下一页</a></p>
+<h1><a name="C12"></a>第四十二章：<a name="i0"></a>Mosaic</h1>
+<p>
+    有一个网格，其中一些方格包含数字，数字表示在数字所在方格周围有多少黑色方格（⚠︎数字所在方格如果是黑色的，则也计算在内）。也就是说，包含数字的方格如果在网格中心位置，则数字表示包括数字所在方格及其周围8个方格在内的9个方格中黑色方格数量；如果在网格的角上，则数字表示包括数字所在方格及其周围3个方格在内的4个方格中黑色方格数量；如果在网格的边上，则数字表示包括数字所在方格及其周围5个方格在内的6个方格中黑色方格数量。
+</p>
+<p>
+Left-click does a step in the circle of modes: unmarked -> marked -> blank.
+</p>
+<p>
+Right-click (or a long press on Android) does two steps instead of one. 
+</p>
+<p>
+Drag is supported, vertically and horizontally (diagonally is not), sets all unmarked
+tiles to the first tile state (according to the button). Right drag might not work
+on touchscreens and touchpads.
+</p>
+<p>
+The puzzle is guaranteed to be solvable, using single clues alone (the advanced logic, which
+works with more than one clue, is not implemented yet, yet you can play advanced logic puzzles,
+they will just fail to auto-solve).
+
+The game is also known as: ArtMosaico, Count and Darken, Cuenta Y Sombrea, Fill-a-Pix,
+Fill-In, Komsu Karala, Magipic, Majipiku, Mosaico, Mosaik, Mozaiek, Nampre Puzzle, Nurie-Puzzle, Oekaki-Pix, Voisimage.
+Implementation is loosely based on https://github.com/mordechaim/Mosaic
+</p>
+<p>
+Puzzle was added to the collection by Didi Kohen, color design by Michal Shomer
+</p>
+<h2><a name="S12.2"></a>12.2 <a name="i2"></a>Mosaic parameters</h2>
+<p>
+The options available from the &#8216;Custom...&#8217; option on the &#8216;Type&#8217; menu are:
+</p>
+<dl><dt>
+<em>Width</em>, <em>Height</em>
+</dt>
+<dd>
+Size of grid in squares.
+</dd>
+<dt>
+<em>Aggressive generation (longer)</em>
+</dt>
+<dd>
+Aggressive is making sure that there are no spare clues, it takes a while to check, so it's disabled
+in the 50x50 preset, you are welcome to use it, but keep in mind that 50x50 can take minutes to generate
+and 100x100 can take over 30 minutes to generate, this may widely vary since it's random.
+</dd>
+</dl>
+
+<hr><address></address></body>
+</html>

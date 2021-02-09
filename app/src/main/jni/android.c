@@ -15,11 +15,8 @@
 #include <signal.h>
 #include <pthread.h>
 #include <math.h>
-
 #include <sys/time.h>
-
-#include "puzzles/puzzles.h"
-#include "android.h"
+#include "puzzles.h"
 
 #ifndef JNICALL
 #define JNICALL
@@ -40,6 +37,15 @@ void fatal(const char *fmt, ...)
 	fprintf(stderr, "\n");
 	exit(1);
 }
+
+struct frontend {
+	midend *me;
+	int timer_active;
+	struct timeval last_time;
+	config_item *cfg;
+	int cfg_which;
+	int ox, oy;
+};
 
 static frontend *fe = NULL;
 static pthread_key_t envKey;
@@ -541,7 +547,7 @@ bool android_deserialise_read(void *ctx, void *buf, int len)
 	if (len < 0) return false;
 	size_t l = min((size_t)len, deserialise_readlen);
 	if (l == 0) return len == 0;
-	memcpy( buf, deserialise_readptr, l );
+	memcpy(buf, deserialise_readptr, l);
 	deserialise_readptr += l;
 	deserialise_readlen -= l;
 	return l == len;
@@ -603,15 +609,9 @@ jstring JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_htmlHelpTopic(JNIEnv *
 	return (*env)->NewStringUTF(env, thegame->htmlhelp_topic);
 }
 
-extern const char* gamenames[];
-
 const game* game_by_name(const char* name) {
-	int i;
-	for (i = 0; i<gamecount; i++) {
-		if (!strcmp(name, gamenames[i])) {
-			return gamelist[i];
-		}
-	}
+	for (int i = 0; i<gamecount; i++)
+	    if (!strcmp(name, gamelist[i]->htmlhelp_topic)) return gamelist[i];
 	return NULL;
 }
 
@@ -679,7 +679,7 @@ jfloatArray JNICALL Java_name_boyle_chris_sgtpuzzles_GameView_getColours(JNIEnv 
 	return jColours;
 }
 
-jobject getPresetInternal(JNIEnv *env, const struct preset_menu_entry entry);
+jobject getPresetInternal(JNIEnv *env, struct preset_menu_entry entry);
 
 jobjectArray getPresetsInternal(JNIEnv *env, struct preset_menu *menu) {
     jclass MenuEntry = (*env)->FindClass(env, "name/boyle/chris/sgtpuzzles/MenuEntry");
@@ -782,7 +782,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
 	jclass cls, vcls;
 	JNIEnv *env;
-	if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2)) return JNI_ERR;
+	if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_6)) return JNI_ERR;
 	pthread_key_create(&envKey, NULL);
 	pthread_setspecific(envKey, env);
 	cls = (*env)->FindClass(env, "name/boyle/chris/sgtpuzzles/GamePlay");

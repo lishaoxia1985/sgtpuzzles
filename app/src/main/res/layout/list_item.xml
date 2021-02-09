@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         tools:ignore="UseCompoundDrawables,UselessParent">
         <ImageView
             android:id="@+id/icon"
@@ -23,7 +24,7 @@
             android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:bufferType="spannable"
             android:paddingLeft="2dp"

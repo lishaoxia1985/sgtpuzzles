@@ -6,7 +6,7 @@
  * it directly, or the changes will be lost next time mkfiles.pl runs.
  * Instead, edit Recipe and/or its *.R subfiles.
  */
-#include "puzzles/puzzles.h"
+#include "puzzles.h"
 #define GAMELIST(A) \
     A(blackbox) \
     A(bridges) \
@@ -25,6 +25,7 @@
     A(magnets) \
     A(map) \
     A(mines) \
+    A(mosaic) \
     A(net) \
     A(netslide) \
     A(palisade) \
@@ -53,5 +54,3 @@
 GAMELIST(DECL)
 const game *gamelist[] = { GAMELIST(REF) };
 const int gamecount = lenof(gamelist);
-#define NAME(x) #x,
-const char* gamenames[] = { GAMELIST(NAME) };

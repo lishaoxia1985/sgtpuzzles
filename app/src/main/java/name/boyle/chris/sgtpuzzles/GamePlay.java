@@ -38,7 +38,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 import android.provider.OpenableColumns;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -315,15 +314,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			getSupportActionBar().setDisplayUseLogoEnabled(false);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-				getSupportActionBar().addOnMenuVisibilityListener(visible -> {
-					// https://code.google.com/p/android/issues/detail?id=69205
-					if (!visible) {
-						supportInvalidateOptionsMenu();
-						rethinkActionBarCapacity();
-					}
-				});
-			}
 		}
 		mainLayout = findViewById(R.id.mainLayout);
 		statusBar = findViewById(R.id.statusBar);
@@ -714,11 +704,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		default:
 			ret = super.onOptionsItemSelected(item);
 			break;
-		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			// https://code.google.com/p/android/issues/detail?id=69205
-			supportInvalidateOptionsMenu();
-			rethinkActionBarCapacity();
 		}
 		return ret;
 	}
@@ -1498,38 +1483,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	{
 		if (keysAlreadySet) setKeyboardVisibility(startingBackend, newConfig);
 		super.onConfigurationChanged(newConfig);
-		rethinkActionBarCapacity();
 		supportInvalidateOptionsMenu();  // for orientation of presets in type menu
-	}
-
-	/** ActionBar's capacity (width) has probably changed, so work around
-	 *  http://code.google.com/p/android/issues/detail?id=20493
-	 * (invalidateOptionsMenu() does not help here) */
-	private void rethinkActionBarCapacity() {
-		if (menu == null) return;
-		DisplayMetrics dm = getResources().getDisplayMetrics();
-		final int screenWidthDIP = (int) Math.round(((double) dm.widthPixels) / dm.density);
-		int state = MenuItem.SHOW_AS_ACTION_ALWAYS;
-		if (screenWidthDIP >= 480) {
-			state |= MenuItem.SHOW_AS_ACTION_WITH_TEXT;
-		}
-		menu.findItem(R.id.type_menu).setShowAsAction(state);
-		menu.findItem(R.id.game_menu).setShowAsAction(state);
-		menu.findItem(R.id.help_menu).setShowAsAction(state);
-		final boolean undoRedoKbd = prefs.getBoolean(UNDO_REDO_KBD_KEY, UNDO_REDO_KBD_DEFAULT);
-		final MenuItem undoItem = menu.findItem(R.id.undo);
-		undoItem.setVisible(!undoRedoKbd);
-		final MenuItem redoItem = menu.findItem(R.id.redo);
-		redoItem.setVisible(!undoRedoKbd);
-		if (!undoRedoKbd) {
-			undoItem.setShowAsAction(state);
-			redoItem.setShowAsAction(state);
-			updateUndoRedoEnabled();
-		}
-		// emulator at 598 dip looks bad with title+undo; GT-N7100 at 640dip looks good
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayShowTitleEnabled(screenWidthDIP > 620 || undoRedoKbd);
-		}
 	}
 
 	private void messageBox(final String title, final String msg, final boolean returnToChooser)
@@ -1914,7 +1868,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			maybeUndoRedo = wantKbd;
 			setKeyboardVisibility(startingBackend, getResources().getConfiguration());
 		}
-		rethinkActionBarCapacity();
 	}
 
 	private void applyShowH() {

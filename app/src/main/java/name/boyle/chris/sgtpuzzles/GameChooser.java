@@ -132,7 +132,7 @@ public class GameChooser extends AppCompatActivity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
 		super.onActivityResult(requestCode, resultCode, dataIntent);
-		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null)
+		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null || dataIntent.getData() == null)
 			return;
 		final Uri uri = dataIntent.getData();
 		startActivity(new Intent(Intent.ACTION_VIEW, uri, this, GamePlay.class));

@@ -1,17 +1,24 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "../puzzles/puzzles.h"
-#include "../android.h"
+#include "puzzles.h"
 
 #define USAGE "Usage: puzzles-gen gamename [params | --seed seed | --desc desc]\n"
 
 extern const game* game_by_name(const char *name);
 extern game_params* oriented_params_from_str(const game* game, const char* params, const char** error);
+struct frontend {
+	midend *me;
+	int timer_active;
+	struct timeval last_time;
+	config_item *cfg;
+	int cfg_which;
+	int ox, oy;
+};
 
 enum { DEF_PARAMS, DEF_SEED, DEF_DESC };
 
-void serialise_write(void *ctx, const void *buf, int len) {
+void serialise_write(__unused void *ctx, const void *buf, int len) {
 	write(1, buf, (size_t) len);
 }
 

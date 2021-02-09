@@ -91,7 +91,7 @@ public class GameView extends View
 			CURSOR_LEFT = 0x20b, CURSOR_RIGHT = 0x20c, UI_UNDO = 0x213, UI_REDO = 0x214, MOD_NUM_KEYPAD = 0x4000;
 	int keysHandled = 0;  // debug
 	private ScaleGestureDetector scaleDetector = null;
-	private GestureDetectorCompat gestureDetector;
+	private final GestureDetectorCompat gestureDetector;
 	private static final float MAX_ZOOM = 30.f;
 	private static final float ZOOM_OVERDRAW_PROPORTION = 0.25f;  // of a screen-full, in each direction, that you can see before checkerboard
 	private int overdrawX, overdrawY;
@@ -101,7 +101,7 @@ public class GameView extends View
 	private final Matrix tempDrawMatrix = new Matrix();
 	private enum DragMode { UNMODIFIED, REVERT_OFF_SCREEN, REVERT_TO_START, PREVENT }
 	private DragMode dragMode = DragMode.UNMODIFIED;
-	private OverScroller mScroller;
+	private final OverScroller mScroller;
 	private final EdgeEffect[] edges = new EdgeEffect[4];
 	// ARGB_8888 is viewable in Android Studio debugger but very memory-hungry
 	// It's also necessary to work around a 4.1 bug https://github.com/chrisboyle/sgtpuzzles/issues/63
@@ -210,7 +210,7 @@ public class GameView extends View
 	}
 
 	private PointF getCurrentScroll() {
-		return viewToGame(new PointF(w/2, h/2));
+		return viewToGame(new PointF(w >> 1, h >> 1));
 	}
 
 	private final Runnable animateScroll = new Runnable() {
@@ -440,14 +440,12 @@ public class GameView extends View
 	public boolean onGenericMotionEvent(@NonNull MotionEvent event)
 	{
 		if (isFromSource(event, SOURCE_MOUSE)) {
-			switch (event.getActionMasked()) {
-				case MotionEvent.ACTION_HOVER_MOVE:
-					mousePos = pointFromEvent(event);
-					if (rightMouseHeld && touchState == TouchState.DRAGGING) {
-						event.setAction(MotionEvent.ACTION_MOVE);
-						return handleTouchEvent(event, false);
-					}
-					break;
+			if (event.getActionMasked() == MotionEvent.ACTION_HOVER_MOVE) {
+				mousePos = pointFromEvent(event);
+				if (rightMouseHeld && touchState == TouchState.DRAGGING) {
+					event.setAction(MotionEvent.ACTION_MOVE);
+					return handleTouchEvent(event, false);
+				}
 			}
 		}
 		return super.onGenericMotionEvent(event);
@@ -667,7 +665,7 @@ public class GameView extends View
 			// Draw a little placeholder to aid UI editing
 			final Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.net);
 			if (d == null) throw new RuntimeException("Missing R.drawable.net");
-			int s = w<h ? w : h;
+			int s = Math.min(w, h);
 			int mx = (w-s)/2, my = (h-s)/2;
 			d.setBounds(new Rect(mx,my,mx+s,my+s));
 			d.draw(canvas);

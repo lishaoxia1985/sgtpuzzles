@@ -204,7 +204,6 @@ public class TabFragment extends Fragment implements SharedPreferences.OnSharedP
             }
             setGridCells(views.get(gameId), col.getAndIncrement(), row.get());
         }
-        row.getAndIncrement();
     }
 
     private int mColumns = 0;
@@ -213,7 +212,6 @@ public class TabFragment extends Fragment implements SharedPreferences.OnSharedP
     private void setGridCells(View v, int x, int y) {
         final GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) v.getLayoutParams();
         layoutParams.width = mColWidthPx;
-        layoutParams.height = useGrid ? mColWidthPx + 10 : 250;
         layoutParams.columnSpec = GridLayout.spec(x, 1, GridLayout.CENTER);
         layoutParams.rowSpec = GridLayout.spec(y, 1, GridLayout.CENTER);
         layoutParams.setGravity(Gravity.START);

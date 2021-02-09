@@ -181,6 +181,7 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="name_magnets">Magnets</string>
     <string name="name_map">Map</string>
     <string name="name_mines">Mines</string>
+    <string name="name_mosaic">Mosaic</string>
     <string name="name_net">Net</string>
     <string name="name_netslide">Netslide</string>
     <string name="name_palisade">Palisade</string>
@@ -221,7 +222,8 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="desc_loopy">画一条不间断不交叉的闭合回路，方格中的数字表示该方格的多少条边构成了回路的一部分。</string>
     <string name="desc_magnets">放置磁铁以满足+/-计数（注意并不是所有空格都需要放置磁铁），同时避免磁铁同极互相排斥。</string>
     <string name="desc_map">用4种颜色给地图着色，确保所有相邻区域的颜色不同。</string>
-    <string name="desc_mines">根据给定的邻近地雷数据找出网格中的所有地雷。游戏在首次点击网格后创建，创建过程可能比较慢，请耐心等待。</string>
+    <string name="desc_mines">根据给出的邻近地雷数据找出网格中的所有地雷。游戏在首次点击网格后创建，创建过程可能比较慢，请耐心等待。</string>
+    <string name="desc_mosaic">根据给出的邻近黑色方格数据找出网格中的所有黑色方格，玩法与扫雷游戏类似。</string>
     <string name="desc_net">旋转方格，使网格中所有方格形成连接到中心方格的完整网络。</string>
     <string name="desc_netslide">滑动行（列），使网格中所有方格形成连接到中心方格的完整网络。</string>
     <string name="desc_palisade">将网格划分为大小相等的若干连续区域，区域所包含的方格数量在游戏左下角的状态栏显示，方格中的数字表示区域边界包括该方格的边的数量。</string>

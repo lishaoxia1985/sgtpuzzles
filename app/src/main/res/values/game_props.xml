@@ -18,6 +18,7 @@
 		<item>magnets</item>
 		<item>map</item>
 		<item>mines</item>
+		<item>mosaic</item>
 		<item>net</item>
 		<item>netslide</item>
 		<item>palisade</item>
@@ -165,14 +166,14 @@
 	<color name="range_night_colour_error">#e62e2e</color>
 	<color name="rect_night_colour_line">#ffffff</color>
 	<color name="rect_night_colour_text">#ffffff</color>
-	<color name="signpost_night_colour_arrow">#999999</color>
-	<color name="signpost_night_colour_arrow_bg_dim">#cccccc</color>
-	<color name="signpost_night_colour_number">#000000</color>
+	<color name="signpost_night_colour_arrow">#ffffff</color>
+	<color name="signpost_night_colour_arrow_bg_dim">#4B4B4B</color>
+	<color name="signpost_night_colour_number">#ffffff</color>
 	<color name="signpost_night_colour_number0">#888888</color>
-	<color name="signpost_night_colour_number_set">#aaaaff</color>
-	<color name="signpost_night_colour_number_set_mid">#4444ee</color>
+	<color name="signpost_night_colour_number_set">#FFFF00</color>
+	<color name="signpost_night_colour_number_set_mid">#4B4B00</color>
 	<color name="signpost_night_colour_empty">#dddddd</color>
-	<color name="signpost_night_colour_b0">#000000</color>
+	<color name="signpost_night_colour_b0">#323232</color>
 	<color name="signpost_night_colour_m0">#555555</color>
 	<color name="signpost_night_colour_d0">#000000</color>
 	<color name="signpost_night_colour_x0">#000000</color>
