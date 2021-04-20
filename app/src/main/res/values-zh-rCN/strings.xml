@@ -27,7 +27,7 @@ chris@boyle.name and I'll be happy to include it in future versions.
 Version %s"</string>
     <!-- Things used by the Android front-end only -->
     <string name="app_info">应用信息</string>
-    <string name="app_name">Puzzles</string>
+    <string name="app_name">谜题合集</string>
     <string name="website_url">https://chris.boyle.name/projects/android-puzzles/</string>
     <string name="author_email">chris@boyle.name</string>
     <string name="feedback_body">"
@@ -79,8 +79,6 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <!-- "Completed" dialog -->
     <string name="completedPrompt">游戏完成时的按钮</string>
     <string name="completedPromptSummary">显示开始新游戏或其他游戏的快捷方式</string>
-    <string name="victoryFlash">游戏完成时的动画</string>
-    <string name="victoryFlashSummary">胜利光辉闪耀</string>
     <string name="Change_type">游戏选项</string>
     <!-- Chooser -->
     <string name="my_favorites">我的收藏</string>
@@ -137,10 +135,7 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="orientationPortrait">竖向</string>
     <string name="orientationLandscape">横向</string>
     <string name="nightMode">夜间模式</string>
-    <string name="nightModeOn">开启</string>
-    <string name="nightModeAuto">自动</string>
-    <string name="nightModeOff">关闭</string>
-    <string name="night_mode_hint">夜间模式可在设置菜单中禁用</string>
+    <string name="nightModeSummary">开启夜间模式</string>
     <string name="limitDpi">更粗的网格线以便于阅读</string>
     <string name="limitDpiModeOff">从不 (像素比1：1显示)</string>
     <string name="limitDpiModeAuto">随着谜题尺寸的增加而变细（推荐）</string>
@@ -667,7 +662,7 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="X_points" formatted="false">%d points</string>
     <string name="Number_of_points">Number of points</string>
     <string name="Number_of_points_must_be_at_least_four">Number of points must be at least four</string>
-    <string name="Expected_after_number_in_game_description">Expected \'-\' after number in game description</string>
-    <string name="Expected_comma_after_number_in_game_description">Expected \',\' after number in game description</string>
+    <string name="Expected_after_number_in_game_description">Expected \‘-\’ after number in game description</string>
+    <string name="Expected_comma_after_number_in_game_description">Expected \‘,\’ after number in game description</string>
     <string name="Internal_error_aux_info_badly_formatted">Internal error: aux_info badly formatted</string>
 </resources>

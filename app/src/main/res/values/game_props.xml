@@ -206,6 +206,7 @@
 	<color name="undead_night_colour_grid">#ffffff</color>
 	<color name="undead_night_colour_text">#ffffff</color>
 	<color name="undead_night_colour_monster_outline">#444444</color>
+	<color name="undead_night_colour_flash">#e62e2e</color>
 	<color name="unequal_night_colour_guess">#00bb00</color>
 	<color name="unequal_night_colour_text">#ffffff</color>
 	<color name="untangle_night_colour_background">#333333</color>

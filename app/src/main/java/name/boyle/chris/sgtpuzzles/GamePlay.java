@@ -44,7 +44,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -70,7 +69,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.NavUtils;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 
 import java.io.File;
@@ -98,7 +96,7 @@ import java.util.regex.Pattern;
 import static name.boyle.chris.sgtpuzzles.GameView.UI_REDO;
 import static name.boyle.chris.sgtpuzzles.GameView.UI_UNDO;
 
-public class GamePlay extends AppCompatActivity implements OnSharedPreferenceChangeListener, NightModeHelper.Parent
+public class GamePlay extends AppCompatActivity implements OnSharedPreferenceChangeListener
 {
 	static final String TAG = "GamePlay";
 	static final String STATE_PREFS_NAME = "state";
@@ -116,7 +114,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private static final String MOUSE_BACK_KEY = "extMouseBackKey";
 	private static final String PATTERN_SHOW_LENGTHS_KEY = "patternShowLengths";
 	private static final String COMPLETED_PROMPT_KEY = "completedPrompt";
-	private static final String VICTORY_FLASH_KEY = "victoryFlash";
 	private static final String CONTROLS_REMINDERS_KEY = "controlsReminders";
 	private static final String OLD_SAVED_COMPLETED = "savedCompleted";
 	private static final String OLD_SAVED_GAME = "savedGame";
@@ -137,6 +134,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private static final String LIGHTUP_383_REPLACE_ROT4 = "$1s3$2";
 	private static final String UNDO_NEW_GAME_SEEN = "undoNewGameSeen";
 	private static final String REDO_NEW_GAME_SEEN = "redoNewGameSeen";
+	private static final String NIGHT_MODE_KEY = "nightMode";
 
 	private AlertDialog progress;
 	private CountDownTimer progressResetRevealer;
@@ -158,7 +156,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	static final long MAX_SAVE_SIZE = 1000000; // 1MB; we only have 16MB of heap
 	private boolean gameWantsTimer = false;
 	private static final int TIMER_INTERVAL = 20;
-	private StringBuffer savingState;
+	private StringBuffer savingState = null;
 	private AlertDialog dialog;
 	private AlertDialog.Builder dialogBuilder;
 	private int dialogEvent;
@@ -177,7 +175,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private boolean everCompleted = false;
 	private final Pattern DIMENSIONS = Pattern.compile("(\\d+)( ?)x\\2(\\d+)(.*)");
 	private long lastKeySent = 0;
-	private NightModeHelper nightModeHelper;
 	private Intent appStartIntentOnResume = null;
 	private boolean swapLR = false;
 	private boolean migrateLightUp383InProgress = false;
@@ -196,7 +193,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		PuzzlesHandler(GamePlay outer) {
 			ref = new WeakReference<>(outer);
 		}
-		public void handleMessage( Message msg ) {
+		public void handleMessage(Message msg) {
 			GamePlay outer = ref.get();
 			if (outer != null) outer.handleMessage(msg);
 		}
@@ -322,25 +319,15 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		dialogIds = new ArrayList<>();
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 		gameView.requestFocus();
-		nightModeHelper = new NightModeHelper(this, this);
 		applyLimitDPI(false);
 		if (prefs.getBoolean(KEYBOARD_BORDERS_KEY, false)) {
 			applyKeyboardBorders();
 		}
 		applyMouseLongPress();
 		applyMouseBackKey();
-		refreshStatusBarColours();
-		getWindow().setBackgroundDrawable(null);
+		refreshNightNow();
 		setUpBeam();
 		appStartIntentOnResume = getIntent();
-	}
-
-	private void refreshStatusBarColours() {
-		final boolean night = nightModeHelper.isNight();
-		final int foreground = ResourcesCompat.getColor(getResources(), night ? R.color.night_status_bar_text : R.color.status_bar_text, getTheme());
-		final int background = ResourcesCompat.getColor(getResources(), night ? R.color.night_game_background : R.color.game_background, getTheme());
-		statusBar.setTextColor(foreground);
-		statusBar.setBackgroundColor(background);
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -762,13 +749,12 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		final int itemId = item.getItemId();
 		if (itemId == R.id.custom) {
 			configEvent(CFG_SETTINGS);
-			return true;
 		} else {
 			final String presetParams = orientGameType(gameTypesById.get(itemId));
 			Log.d(TAG, "preset: " + itemId + ": " + presetParams);
 			startGame(GameLaunch.toGenerate(currentBackend, presetParams));
-			return true;
 		}
+		return true;
 	};
 
 	private void doTypeMenu() {
@@ -962,11 +948,10 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	}
 
 	private String generateGame(final List<String> args) throws IllegalArgumentException, IOException {
-		String game;
 		startGameGenProcess(args);
 		OutputStream stdin = gameGenProcess.getOutputStream();
 		stdin.close();
-		game = Utils.readAllOf(gameGenProcess.getInputStream());
+		String game = Utils.readAllOf(gameGenProcess.getInputStream());
 		if (game.length() == 0) game = null;
 		int exitStatus = Utils.waitForProcess(gameGenProcess);
 		if (exitStatus != 0) {
@@ -1268,7 +1253,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	protected void onPause()
 	{
 		handler.removeMessages(MsgType.TIMER.ordinal());
-		nightModeHelper.onPause();
 		if (progress == null) save();
 		super.onPause();
 	}
@@ -1284,7 +1268,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			finish();
 			return;
 		}
-		nightModeHelper.onResume();
 		if (appStartIntentOnResume != null) {
 			onNewIntent(appStartIntentOnResume);
 			appStartIntentOnResume = null;
@@ -1527,11 +1510,10 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			Toast.makeText(GamePlay.this, titleText, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		final Dialog d = new Dialog(this, R.style.Dialog_Completed);
+		final Dialog d = new Dialog(this);
 		WindowManager.LayoutParams lp = d.getWindow().getAttributes();
 		lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 		d.getWindow().setAttributes(lp);
-		d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		d.setContentView(R.layout.completed);
 		final TextView title = d.findViewById(R.id.completedTitle);
 		title.setText(titleText);
@@ -1800,9 +1782,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		gameView.limitDpi = "auto".equals(pref) ? GameView.LimitDPIMode.LIMIT_AUTO :
 				"off".equals(pref) ? GameView.LimitDPIMode.LIMIT_OFF :
 						GameView.LimitDPIMode.LIMIT_ON;
-		if (alreadyStarted) {
-			gameView.rebuildBitmap();
-		}
+		if (alreadyStarted) gameView.rebuildBitmap();
 	}
 
 	private void applyFullscreen(boolean alreadyStarted) {
@@ -1848,20 +1828,16 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		}
 	}
 
-	@Override
-	public void refreshNightNow(final boolean isNight, final boolean alreadyStarted) {
-		gameView.night = isNight;
-		if (alreadyStarted) {
-			if (currentBackend != null) {
-				gameView.refreshColours(currentBackend);
-				gameView.clear();
-				gameViewResized();  // cheat - we just want a redraw
-			}
-			refreshStatusBarColours();
+	public void refreshNightNow() {
+		gameView.night = prefs.getBoolean(NIGHT_MODE_KEY, false);
+		if (currentBackend != null) {
+			gameView.refreshColours(currentBackend);
+			gameView.clear();
+			gameViewResized();  // cheat - we just want a redraw
 		}
 	}
 
-		private void applyUndoRedoKbd() {
+	private void applyUndoRedoKbd() {
 		boolean undoRedoKbd = prefs.getBoolean(UNDO_REDO_KBD_KEY, UNDO_REDO_KBD_DEFAULT);
 		final String wantKbd = undoRedoKbd ? "UR" : "";
 		if (!wantKbd.equals(maybeUndoRedo)) {
@@ -1884,8 +1860,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				keyboard.setUndoRedoEnabled(true, true);
 			}
 			if (menu != null) {
-				MenuItem mi;
-				mi = menu.findItem(R.id.undo);
+				MenuItem mi = menu.findItem(R.id.undo);
 				if (mi != null) {
 					mi.setEnabled(true);
 					mi.setIcon(undoEnabled ? R.drawable.ic_action_undo : R.drawable.ic_action_undo_disabled);
@@ -1897,18 +1872,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				}
 			}
 		});
-	}
-
-	@UsedByJNI
-	void purgingStates()
-	{
-		redoToGame = null;
-	}
-
-	@UsedByJNI
-	boolean allowFlash()
-	{
-		return prefs.getBoolean(VICTORY_FLASH_KEY, true);
 	}
 
 	native void startPlaying(GameView _gameView, String savedGame);

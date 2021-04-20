@@ -43,20 +43,14 @@
             android:entryValues="@array/orientationModes"
             android:key="orientation"
             android:title="@string/orientation" />
-        <ListPreference
-            android:defaultValue="@string/nightModeDefaultValue"
-            android:entries="@array/nightModeDescs"
-            android:entryValues="@array/nightModes"
+        <SwitchPreference
+            android:defaultValue="false"
             android:key="nightMode"
+            android:summary="@string/nightModeSummary"
             android:title="@string/nightMode" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/displaySettings">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="victoryFlash"
-            android:summary="@string/victoryFlashSummary"
-            android:title="@string/victoryFlash" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="completedPrompt"
@@ -110,7 +104,6 @@
     <PreferenceCategory android:title="@string/About_this_app">
         <Preference
             android:key="about_content"
-            android:selectable="false"
             android:summary="@string/about_content"
             android:title="@string/app_info" />
         <PreferenceScreen android:title="@string/Project_website">

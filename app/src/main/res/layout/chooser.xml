@@ -11,7 +11,6 @@
         app:tabMaxWidth="0dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        android:background="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

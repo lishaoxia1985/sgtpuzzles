@@ -28,8 +28,8 @@ import java.util.Arrays;
 class FilePicker extends Dialog
 {
 	private String[] files;
-	private ListView lv;
-	private FilePicker parent;
+	private final ListView lv;
+	private final FilePicker parent;
 	private final AppCompatActivity activity;
 
 	private void dismissAll()

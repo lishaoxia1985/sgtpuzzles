@@ -16,19 +16,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
 
-public class HelpActivity extends AppCompatActivity implements NightModeHelper.Parent {
+public class HelpActivity extends AppCompatActivity {
 
 	static final String TOPIC = "name.boyle.chris.sgtpuzzles.TOPIC";
 	private static final Pattern ALLOWED_TOPICS = Pattern.compile("^[a-z]+$");
 	private static final Pattern URL_SCHEME = Pattern.compile("^[a-z0-9]+:");
+	private static final String NIGHT_MODE_KEY = "nightMode";
 	private WebView webView;
-	private NightModeHelper nightModeHelper;
 
 	@Override
 	@SuppressLint("SetJavaScriptEnabled")
@@ -45,8 +46,7 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 		}
 		setContentView(R.layout.activity_help);
 		webView = findViewById(R.id.webView);
-		nightModeHelper = new NightModeHelper(this, this);
-		if (nightModeHelper.isNight()) webView.setBackgroundColor(Color.BLACK);
+		final boolean isNight = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(NIGHT_MODE_KEY, false);
 		webView.setWebChromeClient(new WebChromeClient() {
 			public void onReceivedTitle(WebView w, String title) {
 				getSupportActionBar().setTitle(getString(R.string.title_activity_help) + ": " + title);
@@ -58,7 +58,7 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 					getSupportActionBar().setTitle(getString(R.string.title_activity_help) + ": " + w.getTitle());
 			}
 		});
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
 			webView.setWebViewClient(new WebViewClient() {
 				@Override
 				public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -74,32 +74,32 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 					return true;
 				}
-
 				@Override
 				public void onPageFinished(WebView view, String url) {
-					refreshNightNow(nightModeHelper.isNight(), true);
+					refreshNightNow(isNight);
 				}
 			});
-		else webView.setWebViewClient(new WebViewClient() {
-			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.startsWith("javascript:")) {
-					return false;
-				}
-				if (url.startsWith("file:") || !URL_SCHEME.matcher(url).find()) {
-					webView.loadUrl(url);
+		} else {
+			webView.setWebViewClient(new WebViewClient() {
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+					if (url.startsWith("javascript:")) {
+						return false;
+					}
+					if (url.startsWith("file:") || !URL_SCHEME.matcher(url).find()) {
+						webView.loadUrl(url);
+						return true;
+					}
+					// spawn other app
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 					return true;
 				}
-				// spawn other app
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-				return true;
-			}
-
-			@Override
-			public void onPageFinished(WebView view, String url) {
-				refreshNightNow(nightModeHelper.isNight(), true);
-			}
-		});
+				@Override
+				public void onPageFinished(WebView view, String url) {
+					refreshNightNow(isNight);
+				}
+			});
+		}
 		final WebSettings settings = webView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setAllowFileAccess(false);  // android_asset still works
@@ -114,15 +114,13 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 		boolean haveLocalised = false;
 		try {
 			final String[] list = resources.getAssets().list(lang);
-			for (String s : list) {
+			for (String s : list)
 				if (s.equals(topic + ".html")) {
 					haveLocalised = true;
+					break;
 				}
-			}
 		} catch (IOException ignored) {}
-		if (!haveLocalised) {
-			assetPath = helpPath("en", topic);
-		}
+		if (!haveLocalised) assetPath = helpPath("en", topic);
 		webView.loadUrl("file:///android_asset/" + assetPath);
 	}
 
@@ -134,11 +132,8 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0
 				&& keyCode == KeyEvent.KEYCODE_BACK) {
-			if (webView.canGoBack()) {
-				webView.goBack();
-			} else {
-				finish();
-			}
+			if (webView.canGoBack()) webView.goBack();
+			else finish();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -154,8 +149,7 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void refreshNightNow(final boolean isNight, final boolean alreadyStarted) {
+	public void refreshNightNow(final boolean isNight) {
 		webView.setBackgroundColor(isNight ? Color.BLACK : Color.WHITE);
 		webView.loadUrl(isNight
 				? "javascript:document.body.className += ' night';null;"
@@ -165,13 +159,11 @@ public class HelpActivity extends AppCompatActivity implements NightModeHelper.P
 
 	@Override
 	protected void onPause() {
-		nightModeHelper.onPause();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		nightModeHelper.onResume();
 	}
 }

@@ -1,9 +1,8 @@
 package name.boyle.chris.sgtpuzzles;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,8 +13,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -26,6 +27,7 @@ import java.util.List;
 public class GameChooser extends AppCompatActivity
 {
 	static final String CHOOSER_STYLE_KEY = "chooserStyle";
+	private static final String NIGHT_MODE_KEY = "nightMode";
 	private static final int REQ_CODE_PICKER = AppCompatActivity.RESULT_FIRST_USER;
 
 	private Menu menu;
@@ -37,6 +39,9 @@ public class GameChooser extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chooser);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final boolean isNight = prefs.getBoolean(NIGHT_MODE_KEY, false);
+		AppCompatDelegate.setDefaultNightMode(isNight ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 		TabLayout tabLayout = findViewById(R.id.tab_layout);
 		ViewPager viewPager = findViewById(R.id.view_pager);
 		tabs = new String[]{getResources().getString(R.string.my_favorites), getResources().getString(R.string.all_games)};
@@ -127,15 +132,5 @@ public class GameChooser extends AppCompatActivity
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
-		super.onActivityResult(requestCode, resultCode, dataIntent);
-		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null || dataIntent.getData() == null)
-			return;
-		final Uri uri = dataIntent.getData();
-		startActivity(new Intent(Intent.ACTION_VIEW, uri, this, GamePlay.class));
-		overridePendingTransition(0, 0);
 	}
 }

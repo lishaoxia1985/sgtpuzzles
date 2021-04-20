@@ -11,17 +11,6 @@
 		<item>@string/orientationPortrait</item>
 		<item>@string/orientationLandscape</item>
 	</array>
-`	<array name="nightModes">
-		<item>on</item>
-		<item>auto</item>
-		<item>off</item>
-	</array>
-	<string name="nightModeDefaultValue" translatable="false">auto</string>
-	<array name="nightModeDescs">
-		<item>@string/nightModeOn</item>
-		<item>@string/nightModeAuto</item>
-		<item>@string/nightModeOff</item>
-	</array>
 	<array name="limitDpiModes">
 		<item>off</item>
 		<item>auto</item>

@@ -79,8 +79,6 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <!-- "Completed" dialog -->
     <string name="completedPrompt">Buttons when a game is completed</string>
     <string name="completedPromptSummary">Shortcuts to start a new or different game</string>
-    <string name="victoryFlash">Animations when a game is completed</string>
-    <string name="victoryFlashSummary">Victory flash</string>
     <string name="Change_type">Change type</string>
     <!-- Chooser -->
     <string name="my_favorites">My Favorites</string>
@@ -137,10 +135,7 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="orientationPortrait">Portrait</string>
     <string name="orientationLandscape">Landscape</string>
     <string name="nightMode">Night mode</string>
-    <string name="nightModeOn">On</string>
-    <string name="nightModeAuto">In low light</string>
-    <string name="nightModeOff">Off</string>
-    <string name="night_mode_hint">Night mode can be disabled in Settings</string>
+    <string name="nightModeSummary">Turn on Night mode</string>
     <string name="limitDpi">Thicker lines for readability</string>
     <string name="limitDpiModeOff">Never (1 pixel = 1 pixel)</string>
     <string name="limitDpiModeAuto">Thinner as puzzle size increases (recommended)</string>
@@ -667,7 +662,7 @@ If you don’t want to grant it you can instead locate the file from within Puzz
     <string name="X_points" formatted="false">%d points</string>
     <string name="Number_of_points">Number of points</string>
     <string name="Number_of_points_must_be_at_least_four">Number of points must be at least four</string>
-    <string name="Expected_after_number_in_game_description">Expected \'-\' after number in game description</string>
-    <string name="Expected_comma_after_number_in_game_description">Expected \',\' after number in game description</string>
+    <string name="Expected_after_number_in_game_description">Expected \‘-\’ after number in game description</string>
+    <string name="Expected_comma_after_number_in_game_description">Expected \‘,\’ after number in game description</string>
     <string name="Internal_error_aux_info_badly_formatted">Internal error: aux_info badly formatted</string>
 </resources>

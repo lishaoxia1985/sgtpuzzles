@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import java.text.MessageFormat;
@@ -16,11 +18,14 @@ import static name.boyle.chris.sgtpuzzles.PrefsActivity.BACKEND_EXTRA;
 
 public class SettingFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener
 {
+	private static final String NIGHT_MODE_KEY = "nightMode";
 	private BackupManager backupManager = null;
+	private SharedPreferences prefs;
 
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-		backupManager = new BackupManager(this.getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		backupManager = new BackupManager(getContext());
 		addPreferencesFromResource(R.xml.preferences);
 		final String whichBackend = getActivity().getIntent().getStringExtra(BACKEND_EXTRA);
 		final PreferenceCategory chooserCategory = findPreference("gameChooser");
@@ -68,6 +73,14 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (key.equals(NIGHT_MODE_KEY)) {
+			applyNightMode();
+		}
+	}
 
+	private void applyNightMode() {
+		final boolean isNight = prefs.getBoolean(NIGHT_MODE_KEY, false);
+		AppCompatDelegate.setDefaultNightMode(isNight ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+		getActivity().getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
 	}
 }

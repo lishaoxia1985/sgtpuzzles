@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="SolidActionBar" parent="@style/Theme.AppCompat">
-        <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid</item>
-    </style>
-    <style name="SolidActionBar.Gameplay" parent="SolidActionBar">
-        <item name="android:windowBackground">@color/game_background</item>
-    </style>
-    <style name="SolidActionBar.Gameplay.FullScreen" parent="SolidActionBar.Gameplay">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
-    <style name="GameChooserItem">
-        <item name="background">@android:drawable/list_selector_background</item>
+<resources>
+    <style name="DayNight" parent="Theme.AppCompat.DayNight">
+        <item name="android:windowDisablePreview">true</item>
     </style>
     <style name="ChooserItemName" parent="@android:style/TextAppearance.Medium" />
-    <style name="Dialog.Completed" parent="@android:style/Theme.Dialog">
-        <item name="windowNoTitle">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
     <style name="Button.Completed" parent="@android:style/Widget.Button" />
     <style name="TextAppearance.Completed.Title" parent="@android:style/TextAppearance.Large">
-        <item name="fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
+        <item name="fontFamily">sans-serif-condensed</item>
+    </style>
+    <style name="WindowAnimationFadeInOut">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 </resources>

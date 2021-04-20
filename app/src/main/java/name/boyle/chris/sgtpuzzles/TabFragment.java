@@ -24,8 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.preference.PreferenceManager;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -33,7 +35,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static android.content.Context.MODE_PRIVATE;
 import static name.boyle.chris.sgtpuzzles.GameChooser.CHOOSER_STYLE_KEY;
 
 public class TabFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -68,16 +69,6 @@ public class TabFragment extends Fragment implements SharedPreferences.OnSharedP
         tabName = getArguments().getString("tabName");
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.registerOnSharedPreferenceChangeListener(this);
-        SharedPreferences state = getActivity().getSharedPreferences(GamePlay.STATE_PREFS_NAME, MODE_PRIVATE);
-        String oldCS = state.getString(CHOOSER_STYLE_KEY, null);
-        if (oldCS != null) {  // migrate to somewhere more sensible
-            SharedPreferences.Editor ed = prefs.edit();
-            ed.putString(CHOOSER_STYLE_KEY, oldCS);
-            ed.apply();
-            ed = state.edit();
-            ed.remove(CHOOSER_STYLE_KEY);
-            ed.apply();
-        }
         useGrid = "grid".equals(prefs.getString(CHOOSER_STYLE_KEY, "list"));
     }
 
@@ -122,8 +113,10 @@ public class TabFragment extends Fragment implements SharedPreferences.OnSharedP
             view.setOnLongClickListener(v -> {
                 toggleStarred(gameId);
                 GameChooser parentActivity = (GameChooser) getActivity();
-                TabFragment myFavoritesFragment = parentActivity.tabFragmentList.get(0);
-                TabFragment allGamesFragment = parentActivity.tabFragmentList.get(1);
+                ViewPager viewPager = parentActivity.findViewById(R.id.view_pager);
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) viewPager.getAdapter();
+                TabFragment myFavoritesFragment = (TabFragment) adapter.instantiateItem(viewPager,0);
+                TabFragment allGamesFragment = (TabFragment) adapter.instantiateItem(viewPager,1);
                 if(tabName.equals(getResources().getString(R.string.my_favorites)))
                     table.removeView(v);
                 else if (isStarred(gameId))

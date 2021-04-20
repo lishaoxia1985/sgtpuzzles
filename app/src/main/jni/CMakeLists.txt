@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID -DSMALL_SCREEN -DSTYLUS_BASED -DNO_PRINTING -DCOMBINED -DVIVID_COLOURS")
 include_directories(puzzles)
 file(GLOB puzzles_SRC
@@ -8,6 +8,7 @@ file(GLOB puzzles_SRC
 list(REMOVE_ITEM puzzles_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/emcc.c
         ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/gtk.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/list.c
         ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/nestedvm.c
         ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/nullfe.c
         ${CMAKE_CURRENT_SOURCE_DIR}/puzzles/nullgame.c

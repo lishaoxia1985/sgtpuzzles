@@ -19,69 +19,7 @@
     <application android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:backupAgent=".BackupAgent" android:allowBackup="true" tools:ignore="AllowBackup,UnusedAttribute"
-        android:extractNativeLibs="true"><!-- see GamePlay.startGameGenProcess: this is the easiest way to get puzzlesgen installed and found per-architecture -->
-		<activity android:name=".SGTPuzzles" android:exported="true" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoDisplay">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<data android:scheme="sgtpuzzles" />
-			</intent-filter>
-			<intent-filter tools:ignore="AppLinkUrlError,GoogleAppIndexingWarning">
-				<action android:name="android.intent.action.VIEW" />
-				<action android:name="android.intent.action.EDIT" />
-				<action android:name="android.nfc.action.NDEF_DISCOVERED" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:mimeType="text/prs.sgtatham.puzzles" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<action android:name="android.intent.action.EDIT" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="file" />
-				<data android:scheme="content" />
-				<data android:host="*" />
-				<!-- File managers' fault; some don't even fall back to application/octet-stream; they just leave it blank -->
-				<data android:mimeType="*/*" />
-				<!-- PatternMatcher's fault: https://stackoverflow.com/q/3400072/6540 -->
-				<data android:pathPattern="/.*\\.sgtp"/>
-				<data android:pathPattern="/.*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sgtp"/>
-				<data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.sav"/>
-			</intent-filter>
-		</activity>
+        android:extractNativeLibs="true">
 		<provider
 			android:name=".FixedTypeFileProvider"
 			android:authorities="name.boyle.chris.sgtpuzzles.fileprovider"
@@ -91,32 +29,32 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/file_paths" />
 		</provider>
-        <activity android:name=".GamePlay" android:exported="false" android:theme="@style/SolidActionBar.Gameplay"
+        <activity android:name=".GamePlay" android:exported="false" android:theme="@style/DayNight"
                   android:windowSoftInputMode="adjustPan"
                   android:label="@string/app_name" android:stateNotNeeded="true"
                   android:launchMode="singleTask" android:parentActivityName=".GameChooser"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".GameChooser" />
         </activity>
-        <activity android:name=".GameChooser" android:exported="true" android:theme="@style/SolidActionBar"
+        <activity android:name=".GameChooser" android:exported="true" android:theme="@style/DayNight"
                   android:launchMode="singleTask"
                   android:label="@string/app_name" android:stateNotNeeded="true"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
                 <data android:scheme="sgtpuzzles" />
             </intent-filter>
         </activity>
-        <activity android:name=".PrefsActivity" android:exported="false" android:theme="@style/SolidActionBar"
+        <activity android:name=".PrefsActivity" android:exported="false" android:theme="@style/DayNight"
                   android:label="@string/Settings" android:launchMode="singleTask"
                   android:configChanges="keyboard|keyboardHidden|orientation"
                   android:parentActivityName=".GamePlay">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".SGTPuzzles" />
         </activity>
-        <activity android:name=".HelpActivity" android:exported="false" android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        <activity android:name=".HelpActivity" android:exported="false" android:theme="@style/DayNight"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                   android:label="@string/title_activity_help" android:launchMode="singleTask" >
         </activity>

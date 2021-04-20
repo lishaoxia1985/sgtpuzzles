@@ -15,7 +15,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -214,7 +214,7 @@ public class GamePlayTest {
 		for (int key : keystrokes) {
 			actions.add(pressKey(key));
 		}
-		addExample(backend, gameID, actions.toArray(new ViewAction[actions.size()]));
+		addExample(backend, gameID, actions.toArray(new ViewAction[0]));
 	}
 
 	private static void addExample(final String backend, final String gameID, final ViewAction... actions) {
