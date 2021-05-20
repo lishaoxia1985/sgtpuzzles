@@ -644,7 +644,7 @@ game_params* oriented_params_from_str(const game* my_game, const char* params_st
 	return params;
 }
 
-void startPlayingIntGameID(frontend* new_fe, jstring jsGameID, jstring backend)
+void startPlayingIntGameID(frontend* new_fe, jstring jsGameID, jstring backend, bool isGameID)
 {
 	JNIEnv *env = (JNIEnv*)pthread_getspecific(envKey);
 	const char * backendChars = (*env)->GetStringUTFChars(env, backend, NULL);
@@ -659,6 +659,14 @@ void startPlayingIntGameID(frontend* new_fe, jstring jsGameID, jstring backend)
 	const char * gameIDjs = (*env)->GetStringUTFChars(env, jsGameID, NULL);
 	char * gameID = dupstr(gameIDjs);
 	(*env)->ReleaseStringUTFChars(env, jsGameID, gameIDjs);
+	if (!isGameID) {
+		const char* errors = NULL;
+		game_params *params = oriented_params_from_str(thegame, gameID, &errors);
+        sfree(gameID);
+		midend_set_params(new_fe->me, params);
+		midend_new_game(new_fe->me);
+		return;
+	}
 	const char * error = midend_game_id(new_fe->me, gameID);
 	sfree(gameID);
 	if (error) {
@@ -746,8 +754,11 @@ void startPlayingInt(JNIEnv *env, jobject _obj, jobject _gameView, jstring backe
 	memset(new_fe, 0, sizeof(frontend));
 	new_fe->ox = -1;
 	if (isGameID) {
-		startPlayingIntGameID(new_fe, saveOrGameID, backend);
-	} else {
+		startPlayingIntGameID(new_fe, saveOrGameID, backend, true);
+	} else if (!isGameID && backend != NULL) {
+		startPlayingIntGameID(new_fe, saveOrGameID, backend, false);
+	}
+	else {
 		deserialiseOrIdentify(new_fe, saveOrGameID, false);
 		if ((*env)->ExceptionCheck(env)) return;
 	}
@@ -764,7 +775,7 @@ void startPlayingInt(JNIEnv *env, jobject _obj, jobject _gameView, jstring backe
     requestKeys(env, fe);
 }
 
-void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlaying(JNIEnv *env, jobject _obj, jobject _gameView, jstring savedGame)
+void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlayingSavedGame(JNIEnv *env, jobject _obj, jobject _gameView, jstring savedGame)
 {
 	startPlayingInt(env, _obj, _gameView, NULL, savedGame, false);
 }
@@ -772,6 +783,11 @@ void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlaying(JNIEnv *env,
 void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlayingGameID(JNIEnv *env, jobject _obj, jobject _gameView, jstring backend, jstring gameID)
 {
 	startPlayingInt(env, _obj, _gameView, backend, gameID, true);
+}
+
+void JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_startPlayingParams(JNIEnv *env, jobject _obj, jobject _gameView, jstring backend, jstring params)
+{
+	startPlayingInt(env, _obj, _gameView, backend, params, false);
 }
 
 jboolean JNICALL Java_name_boyle_chris_sgtpuzzles_GamePlay_isCompletedNow(JNIEnv *env, jobject _obj) {

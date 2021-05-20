@@ -1,8 +1,10 @@
 package name.boyle.chris.sgtpuzzles;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -132,5 +134,15 @@ public class GameChooser extends AppCompatActivity
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
+		super.onActivityResult(requestCode, resultCode, dataIntent);
+		if (requestCode != REQ_CODE_PICKER || resultCode != Activity.RESULT_OK || dataIntent == null || dataIntent.getData() == null)
+			return;
+		final Uri uri = dataIntent.getData();
+		startActivity(new Intent(Intent.ACTION_VIEW, uri, this, GamePlay.class));
+		overridePendingTransition(0, 0);
 	}
 }

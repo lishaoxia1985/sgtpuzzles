@@ -35,9 +35,9 @@ def idForPuzzles() {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
-        targetSdkVersion 28
+        targetSdkVersion 30
         minSdkVersion 16
         applicationId "name.boyle.chris.sgtpuzzles"
         versionCode 120
@@ -84,7 +84,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '29.0.2'
     ndkVersion '21.3.6528147'
 }
 

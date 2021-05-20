@@ -180,10 +180,10 @@ public class SmallKeyboard extends KeyboardView implements KeyboardView.OnKeyboa
 			int charsHeight = 0;
 			if (majors > 0) {
 				if (columnMajor) {
-					charsWidth  = majors * mDefaultWidth + (majors - 1) * mDefaultHorizontalGap;
+					charsWidth  = majors * mDefaultWidth;
 					charsHeight = keyPlusPad * ((majors > 1) ? minorsPerMajor : characters.length());
 				} else {
-					charsHeight = majors * mDefaultHeight + (majors - 1) * mDefaultVerticalGap;
+					charsHeight = majors * mDefaultHeight;
 					charsWidth  = keyPlusPad * ((majors > 1) ? minorsPerMajor : characters.length());
 				}
 			}

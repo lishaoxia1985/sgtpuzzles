@@ -12,7 +12,7 @@ public class GameLaunch {
 	private String saved;
 	private final Uri uri;
 	private final String whichBackend;
-	private final String params;
+	private String params;
 	private final String gameID;
 	private final String seed;
 	private final boolean fromChooser;
@@ -33,6 +33,7 @@ public class GameLaunch {
 		this.undoingOrRedoing = undoingOrRedoing;
 	}
 	
+	@NonNull
 	@Override
 	public String toString() {
 		if (uri != null) return "GameLaunch.ofUri(" + uri + ")";
@@ -83,6 +84,10 @@ public class GameLaunch {
 		return whichBackend;
 	}
 
+	public void setParams(@NonNull String params) {
+		this.params = params;
+	}
+
 	public String getParams() {
 		return params;
 	}
@@ -99,7 +104,7 @@ public class GameLaunch {
 		return uri;
 	}
 
-	public void finishedGenerating(@NonNull String saved) {
+	public void setSaved(@NonNull String saved) {
 		if (this.saved != null) {
 			throw new RuntimeException("finishedGenerating called twice");
 		}

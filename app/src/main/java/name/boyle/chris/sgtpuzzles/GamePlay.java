@@ -8,12 +8,10 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -72,18 +70,14 @@ import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -122,7 +116,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	static final String SAVED_GAME_PREFIX = "savedGame_";
 	public static final String LAST_PARAMS_PREFIX = "last_params_";
 	private static final String SWAP_L_R_PREFIX = "swap_l_r_";
-	private static final String PUZZLESGEN_LAST_UPDATE = "puzzlesgen_last_update";
 	private static final String BLUETOOTH_PACKAGE_PREFIX = "com.android.bluetooth";
 	private static final int REQ_CODE_CREATE_DOC = AppCompatActivity.RESULT_FIRST_USER;
 	private static final int REQ_CODE_STORAGE_PERMISSION = AppCompatActivity.RESULT_FIRST_USER + 1;
@@ -146,7 +139,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private MenuEntry[] gameTypesMenu = new MenuEntry[]{};
 	private int currentType = 0;
 	private boolean workerRunning = false;
-	private Process gameGenProcess = null;
 	private boolean solveEnabled = false, customVisible = false,
 			undoEnabled = false, redoEnabled = false,
 			undoIsLoadGame = false, redoIsLoadGame = false;
@@ -164,7 +156,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	private TableLayout dialogLayout;
 	String currentBackend = null;
 	private String startingBackend = null;
-	private Thread worker;
 	private String lastKeys = "";
 	private static final File storageDir = Environment.getExternalStorageDirectory();
 	private String[] games;
@@ -390,10 +381,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		if (progress != null) {
-			stopNative();
-			dismissProgress();
-		}
+		if (progress != null) dismissProgress();
 		migrateToPerPuzzleSave();
 		migrateLightUp383Start();
 		String backendFromChooser = null;
@@ -572,8 +560,8 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			final String title = getString(getResources().getIdentifier("name_" + backend, "string", getPackageName()));
 			runOnUiThread(() -> new AlertDialog.Builder(GamePlay.this)
 					.setMessage(MessageFormat.format(getString(R.string.replaceGame), title))
-					.setPositiveButton(android.R.string.yes, (dialog1, which) -> continueLoading.run())
-					.setNegativeButton(android.R.string.no, (dialog1, which) -> abort(null, returnToChooser)).create().show());
+					.setPositiveButton(android.R.string.ok, (dialog1, which) -> continueLoading.run())
+					.setNegativeButton(android.R.string.cancel, (dialog1, which) -> abort(null, returnToChooser)).create().show());
 		} else {
 			continueLoading.run();
 		}
@@ -934,7 +922,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	{
 		workerRunning = false;
 		runOnUiThread(() -> {
-			stopNative();
 			dismissProgress();
 			if (why != null && !why.equals("")) {
 				messageBox(getString(R.string.Error), why, returnToChooser);
@@ -945,69 +932,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			startingBackend = currentBackend;
 		});
 
-	}
-
-	private String generateGame(final List<String> args) throws IllegalArgumentException, IOException {
-		startGameGenProcess(args);
-		OutputStream stdin = gameGenProcess.getOutputStream();
-		stdin.close();
-		String game = Utils.readAllOf(gameGenProcess.getInputStream());
-		if (game.length() == 0) game = null;
-		int exitStatus = Utils.waitForProcess(gameGenProcess);
-		if (exitStatus != 0) {
-			String error = game;
-			if (error != null) {  // probably bogus params
-				throw new IllegalArgumentException(error);
-			} else if (workerRunning) {
-				error = "Game generation exited with status "+exitStatus;
-				Log.e(TAG, error);
-				throw new IOException(error);
-			}
-			// else cancelled
-		}
-		if( !workerRunning) return null;  // cancelled
-		return game;
-	}
-
-	@SuppressLint("CommitPrefEdits")
-	private void startGameGenProcess(final List<String> args) throws IOException {
-		final ApplicationInfo applicationInfo = getApplicationInfo();
-		final File dataDir = new File(applicationInfo.dataDir);
-		final File libDir;
-		libDir = new File(applicationInfo.nativeLibraryDir);
-		final String baseName = "libpuzzlesgen.so";
-		File installablePath = new File(libDir, baseName);
-		final File SYS_LIB = new File("/system/lib");
-		final File altPath = new File(SYS_LIB, baseName);
-		if (!installablePath.exists() && altPath.exists()) installablePath = altPath;
-		File executablePath = new File(dataDir, "puzzlesgen");
-		if (!executablePath.exists() || (prefs.getInt(PUZZLESGEN_LAST_UPDATE, 0) < BuildConfig.VERSION_CODE)) {
-			copyFile(installablePath, executablePath);
-			prefs.edit().putInt(PUZZLESGEN_LAST_UPDATE, BuildConfig.VERSION_CODE).apply();
-		}
-		Utils.setExecutable(executablePath);
-		final String[] cmdLine = new String[args.size() + 1];
-		cmdLine[0] = executablePath.getAbsolutePath();
-		int i = 1;
-		for (String arg : args) cmdLine[i++] = arg;
-		Log.d(TAG, "exec: " + Arrays.toString(cmdLine));
-		File libPuzDir = libDir;
-		final String SO = "libpuzzles.so";
-		if (! new File(libPuzDir, SO).exists() && new File(SYS_LIB, SO).exists()) libPuzDir = SYS_LIB;
-		gameGenProcess = Runtime.getRuntime().exec(cmdLine,
-				new String[]{"LD_LIBRARY_PATH="+libPuzDir}, libPuzDir);
-	}
-
-	private void copyFile(File src, File dst) throws IOException {
-		InputStream in = new FileInputStream(src);
-		OutputStream out = new FileOutputStream(dst);
-		byte[] buf = new byte[8192];
-		int len;
-		while ((len = in.read(buf)) > 0) {
-			out.write(buf, 0, len);
-		}
-		in.close();
-		out.close();
 	}
 
 	private void startNewGame()
@@ -1034,20 +958,19 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 			previousGame = null;
 		}
 		showProgress(launch);
-		stopNative();
 		startGameThread(launch, previousGame);
 	}
 
 	private void startGameThread(final GameLaunch launch, final String previousGame) {
 		workerRunning = true;
-		(worker = new Thread(launch.needsGenerating() ? "generateAndLoadGame" : "loadGame") { public void run() {
+		new Thread(launch.needsGenerating() ? "generateAndLoadGame" : "loadGame") { public void run() {
 			try {
 				Uri uri = launch.getUri();
 				if (uri != null) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 						checkSize(uri);
 					}  // else just wish really hard that it isn't too big :-p
-					launch.finishedGenerating(Utils.readAllOf(getContentResolver().openInputStream(uri)));
+					launch.setSaved(Utils.readAllOf(getContentResolver().openInputStream(uri)));
 				}
 				String backend = launch.getWhichBackend();
 				if (backend == null) {
@@ -1060,35 +983,18 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				}
 				startingBackend = backend;
 				final boolean generating = launch.needsGenerating();
-				if (generating) {
+				if (generating && launch.getSeed() == null) {
 					String whichBackend = launch.getWhichBackend();
 					String params = launch.getParams();
-					final List<String> args = new ArrayList<>();
-					args.add(whichBackend);
-					if (launch.getSeed() != null) {
-						args.add("--seed");
-						args.add(launch.getSeed());
-					} else {
+					if (params == null) {
+						params = migrateLightUp383(whichBackend, getLastParams(whichBackend));
 						if (params == null) {
-							params = migrateLightUp383(whichBackend, getLastParams(whichBackend));
-							if (params == null) {
-								params = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-										? "--landscape" : "--portrait";
-								Log.d(TAG, "Using default params with orientation: " + params);
-							} else {
-								Log.d(TAG, "Using last params: " + params);
-							}
-						} else {
-							Log.d(TAG, "Using specified params: " + params);
-						}
-						args.add(params);
-					}
-					String generated = generateGame(args);
-					if (generated != null) {
-						launch.finishedGenerating(generated);
-					} else if (workerRunning) {
-						throw new IOException("Internal error generating game: result is blank");
-					}
+							params = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+									? "--landscape" : "--portrait";
+							Log.d(TAG, "Using default params with orientation: " + params);
+						} else Log.d(TAG, "Using last params: " + params);
+					} else Log.d(TAG, "Using specified params: " + params);
+					launch.setParams(params);
 					startGameConfirmed(launch, previousGame);
 				} else if (!launch.isOfLocalState() && launch.getSaved() != null) {
 					warnOfStateLoss(launch.getSaved(), () -> startGameConfirmed(launch, previousGame), launch.isFromChooser());
@@ -1101,39 +1007,30 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				e.printStackTrace();
 				abort(e.getMessage(), launch.isFromChooser());  // internal error :-(
 			}
-		}}).start();
+		}}.start();
 	}
 
 	private void startGameConfirmed(final GameLaunch launch, final String previousGame) {
 		final String toPlay = launch.getSaved();
 		final String gameID = launch.getGameID();
-		if (toPlay == null && gameID == null) {
-			Log.d(TAG, "startGameThread: null game, presumably cancelled");
-			return;
-		}
+		final String seed = launch.getSeed();
+		final String params = launch.getParams();
 		final boolean changingGame;
 		if (currentBackend == null) {
 			if (launch.isFromChooser()) {
 				final String savedBackend = state.getString(SAVED_BACKEND, null);
 				changingGame = savedBackend == null || !savedBackend.equals(startingBackend);
-			} else {
-				changingGame = true;  // launching app
-			}
-		} else {
-			changingGame = ! currentBackend.equals(startingBackend);
-		}
-		if (previousGame != null && !changingGame && !previousGame.equals(toPlay)) {
+			} else changingGame = true;  // launching app
+		} else changingGame = !currentBackend.equals(startingBackend);
+		if (previousGame != null && !changingGame && !previousGame.equals(toPlay))
 			undoToGame = previousGame;
-		} else {
-			undoToGame = null;
-		}
+		else undoToGame = null;
 
 		try {
-			if (toPlay != null) {
-				startPlaying(gameView, toPlay);
-			} else {
-				startPlayingGameID(gameView, startingBackend, gameID);
-			}
+			if (toPlay != null) startPlayingSavedGame(gameView, toPlay);
+			else if (gameID != null) startPlayingGameID(gameView, startingBackend, gameID);
+			else if (seed != null) startPlayingGameID(gameView, startingBackend, seed);
+			else startPlayingParams(gameView, startingBackend, params);
 		} catch (IllegalArgumentException e) {
 			abort(e.getMessage(), launch.isFromChooser());  // probably bogus params
 			return;
@@ -1234,21 +1131,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		return orientGameType(state.getString(LAST_PARAMS_PREFIX + whichBackend, null));
 	}
 
-	private void stopNative()
-	{
-		workerRunning = false;
-		if (gameGenProcess != null) {
-			gameGenProcess.destroy();
-			gameGenProcess = null;
-		}
-		if (worker != null) {
-			while(true) { try {
-				worker.join();  // we may ANR if native code is spinning - safer than leaving a runaway native thread
-				break;
-			} catch (InterruptedException ignored) {} }
-		}
-	}
-
 	@Override
 	protected void onPause()
 	{
@@ -1277,7 +1159,6 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	@Override
 	protected void onDestroy()
 	{
-		stopNative();
 		super.onDestroy();
 	}
 
@@ -1462,7 +1343,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig)
+	public void onConfigurationChanged(@NonNull Configuration newConfig)
 	{
 		if (keysAlreadySet) setKeyboardVisibility(startingBackend, newConfig);
 		super.onConfigurationChanged(newConfig);
@@ -1475,7 +1356,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 				.setTitle(title)
 				.setMessage(msg)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setOnCancelListener(returnToChooser ? (OnCancelListener) dialog1 -> startChooserAndFinish() : null)
+				.setOnCancelListener(returnToChooser ? dialog1 -> startChooserAndFinish() : null)
 				.show();
 	}
 
@@ -1493,13 +1374,7 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	}
 
 	void completed() {
-		handler.postDelayed(() -> {
-			try {
-				completedInternal();
-			} catch (WindowManager.BadTokenException activityWentAway) {
-				// fine, nothing we can do here
-			}
-		}, 0);
+		runOnUiThread(this::completedInternal);
 	}
 
 	private void completedInternal() {
@@ -1800,11 +1675,8 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	}
 
 	private void lightsOut(final boolean fullScreen) {
-		if (fullScreen) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		} else {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		}
+		if (fullScreen) getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 
 	private void applyStayAwake()
@@ -1819,13 +1691,11 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 	@SuppressLint("InlinedApi")
 	private void applyOrientation() {
 		final String orientationPref = prefs.getString(ORIENTATION_KEY, "unspecified");
-		if ("landscape".equals(orientationPref)) {
+		if ("landscape".equals(orientationPref))
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-		} else if ("portrait".equals(orientationPref)) {
+		else if ("portrait".equals(orientationPref))
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-		} else {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-		}
+		else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 
 	public void refreshNightNow() {
@@ -1874,8 +1744,9 @@ public class GamePlay extends AppCompatActivity implements OnSharedPreferenceCha
 		});
 	}
 
-	native void startPlaying(GameView _gameView, String savedGame);
+	native void startPlayingSavedGame(GameView _gameView, String savedGame);
 	native void startPlayingGameID(GameView _gameView, String whichBackend, String gameID);
+	native void startPlayingParams(GameView _gameView, String whichBackend, String params);
 	native void timerTick();
 	native String htmlHelpTopic();
 	native void keyEvent(int x, int y, int k);
